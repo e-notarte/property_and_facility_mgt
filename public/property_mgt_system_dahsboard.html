@@ -4206,12 +4206,7 @@
     function logoutPropertyAdmin() {
       sessionStorage.removeItem('property-management-authenticated');
       sessionStorage.removeItem('property-management-email');
-
-      if (window.parent !== window) {
-        window.parent.location.reload();
-      } else {
-        window.location.reload();
-      }
+      window.location.replace('./');
     }
 
   </script>

@@ -1,15 +1,119 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/property_and_facility_mgt/RII_Logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Property Management System - R-II Builders</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Property Management System</title>
+  <link rel="icon" type="image/png" href="./RII_Logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root { --primary:#1e355f; --accent:#fcae16; --muted:#718096; --error:#dc2626; }
+    * { box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+      background:linear-gradient(rgba(30,53,95,.76),rgba(30,53,95,.76)),
+      url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80') center/cover; }
+    .card { width:min(440px,100%); padding:40px; border-radius:16px; border-top:6px solid var(--accent);
+      background:rgba(255,255,255,.96); box-shadow:0 15px 40px rgba(15,23,42,.35); }
+    .brand { text-align:center; margin-bottom:32px; }
+    .brand img { width:80px; margin-bottom:16px; }
+    .brand h1 { margin:0 0 6px; color:var(--primary); font-size:1.5rem; }
+    .brand p { margin:0; color:var(--muted); font-size:.9rem; }
+    .form-group { margin-bottom:20px; }
+    label { display:block; margin-bottom:8px; color:var(--primary); font-size:.85rem; font-weight:600; }
+    .input { position:relative; }
+    .input i { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); }
+    input[type="email"], input[type="password"] { width:100%; border:1px solid #e2e8f0; border-radius:8px;
+      padding:12px 14px 12px 42px; background:#f8fafc; color:#2d3748; outline:none; font-size:.95rem; }
+    input:focus { border-color:var(--primary); background:white; box-shadow:0 0 0 3px rgba(30,53,95,.1); }
+    .options { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; font-size:.85rem; }
+    .remember { display:flex; align-items:center; gap:8px; cursor:pointer; }
+    .remember input { width:16px; height:16px; accent-color:var(--primary); }
+    .forgot { border:0; background:none; color:var(--primary); font:inherit; cursor:pointer; }
+    .login { width:100%; display:flex; justify-content:center; align-items:center; gap:10px; border:0;
+      border-radius:8px; padding:14px; background:var(--primary); color:white; font-size:1rem;
+      font-weight:600; cursor:pointer; }
+    .login:hover { background:#152748; }
+    .error { display:none; align-items:center; gap:8px; margin-bottom:20px; border-radius:8px;
+      padding:12px; background:rgba(239,68,68,.1); color:var(--error); font-size:.85rem; }
+    .footer { margin:24px 0 0; text-align:center; color:var(--muted); font-size:.8rem; }
+    @media(max-width:480px){ body{padding:0}.card{min-height:100vh;border-radius:0;padding:32px 24px} }
+  </style>
+</head>
+<body>
+  <section class="card" aria-labelledby="title">
+    <div class="brand">
+      <img src="./RII_Logo.png" alt="R-II Builders logo" />
+      <h1 id="title">Welcome Back</h1>
+      <p>Property &amp; Facility Management System</p>
+    </div>
+    <div class="error" id="error" role="alert">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="errorText"></span>
+    </div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input">
+          <i class="fa-regular fa-envelope"></i>
+          <input id="email" type="email" placeholder="Enter your email" autocomplete="email" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input">
+          <i class="fa-solid fa-lock"></i>
+          <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" required />
+        </div>
+      </div>
+      <div class="options">
+        <label class="remember"><input id="remember" type="checkbox" /> <span>Remember me</span></label>
+        <button class="forgot" type="button" id="forgot">Forgot password?</button>
+      </div>
+      <button class="login" type="submit"><span>Sign In</span><i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <p class="footer">© 2026 R-II Builders, Inc. All Rights Reserved.</p>
+  </section>
+  <script>
+    const authKey = 'property-management-authenticated';
+    const emailKey = 'property-management-email';
+    const rememberedKey = 'property-management-email-remembers';
+    if (sessionStorage.getItem(authKey) === 'true') {
+      window.location.replace('./property_mgt_system_dahsboard.html');
+    }
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const remember = document.getElementById('remember');
+    const rememberedEmail = localStorage.getItem(rememberedKey);
+    if (rememberedEmail) {
+      email.value = rememberedEmail;
+      remember.checked = true;
+    }
+    function showError(message) {
+      document.getElementById('errorText').textContent = message;
+      document.getElementById('error').style.display = 'flex';
+    }
+    document.getElementById('forgot').addEventListener('click', () => {
+      showError('Please contact an administrator to reset your password.');
+    });
+    document.getElementById('loginForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const normalizedEmail = email.value.trim().toLowerCase();
+      const allowedDomains = ['@riibuilders.com', '@riibuilders.com.ph', '@rmrriibuilders.com', '@rmrriibuilders.com.ph'];
+      if (!allowedDomains.some((domain) => normalizedEmail.endsWith(domain))) {
+        showError('Use an authorized R-II Builders email address.');
+        return;
+      }
+      if (password.value.length < 6) {
+        showError('Password must be at least 6 characters.');
+        return;
+      }
+      if (remember.checked) localStorage.setItem(rememberedKey, normalizedEmail);
+      else localStorage.removeItem(rememberedKey);
+      sessionStorage.setItem(authKey, 'true');
+      sessionStorage.setItem(emailKey, normalizedEmail);
+      window.location.replace('./property_mgt_system_dahsboard.html');
+    });
+  </script>
+</body>
 </html>
