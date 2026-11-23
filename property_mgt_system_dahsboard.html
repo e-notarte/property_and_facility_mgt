@@ -1,0 +1,4077 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Management | SOA &amp; Utilities Billing - R-II Builders, Inc.</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="./soa_data.js"></script>
+
+  <style>
+    :root {
+      --primary: #1E355F;
+      --primary-dark: #122240;
+      --accent: #FCAE16;
+      --accent-hover: #e59d0d;
+      --bg: #f1f5f9;
+      --bg-surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #0284c7;
+      --sidebar-width: 250px;
+      --topbar-height: 60px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    }
+
+    body.dark-mode {
+      --bg: #090d16;
+      --bg-surface: #131c2e;
+      --border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      clip-path: inset(50%);
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      border: 0;
+      white-space: nowrap;
+    }
+
+    /* TOP NAVIGATION BAR */
+    .top-navbar {
+      height: var(--topbar-height);
+      background-color: var(--primary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-wrap img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-logo-wrap h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: #ffffff;
+    }
+
+    .header-center-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle-btn {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.05rem;
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--accent);
+    }
+
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 6px 4px 14px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.72rem;
+    }
+
+    /* LAYOUT & SIDEBAR */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+      padding-top: var(--topbar-height);
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: var(--topbar-height);
+      bottom: 0;
+      left: 0;
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-inner {
+      padding: 18px 14px;
+    }
+
+    .nav-group-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      font-weight: 700;
+      padding: 0 10px;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+
+    .nav-group-title:first-child {
+      margin-top: 0;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-item a:hover {
+      background: rgba(30, 53, 95, 0.06);
+      color: var(--primary);
+    }
+
+    body.dark-mode .nav-item a:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .nav-item.active a {
+      background: rgba(252, 174, 22, 0.14);
+      color: var(--primary);
+      font-weight: 600;
+      border-left: 3px solid var(--accent);
+    }
+
+    body.dark-mode .nav-item.active a {
+      background: rgba(252, 174, 22, 0.18);
+      color: var(--accent);
+    }
+
+    .nav-label-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-label-wrap i {
+      width: 18px;
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .nav-item.active a i {
+      color: var(--accent);
+    }
+
+    .sidebar-footer {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: var(--bg);
+    }
+
+    .sidebar-footer strong {
+      color: var(--primary);
+      display: block;
+    }
+
+    body.dark-mode .sidebar-footer strong {
+      color: var(--text);
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 26px 30px;
+      max-width: calc(100vw - var(--sidebar-width));
+    }
+
+    .view-section {
+      display: none;
+      animation: fadeIn 0.22s ease;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .view-title-group h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    body.dark-mode .view-title-group h2 {
+      color: #ffffff;
+    }
+
+    .view-title-group p {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .view-action-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* BUTTONS */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.18s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .btn-accent:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-outline {
+      background: var(--bg-surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg);
+      border-color: #cbd5e1;
+    }
+
+    .btn:focus-visible,
+    .form-control-neat:focus-visible,
+    .date-cal-btn:focus-visible,
+    .theme-toggle-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* KPI GRID */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+    }
+
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    body.dark-mode .kpi-value {
+      color: #f8fafc;
+    }
+
+    .kpi-sub {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* CARDS & TOOLBAR */
+    .data-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .data-card-header {
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .data-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    body.dark-mode .data-card-title {
+      color: #ffffff;
+    }
+
+    .data-card-body {
+      padding: 18px 20px;
+    }
+
+    .toolbar-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+      max-width: 340px;
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.83rem;
+      background: var(--bg-surface);
+      color: var(--text);
+      font-family: inherit;
+      height: 38px;
+    }
+
+    .form-control-neat {
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.84rem;
+      background: #ffffff;
+      color: #1e293b;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    body.dark-mode .form-control-neat {
+      background: #0f172a;
+      border-color: #334155;
+      color: #f1f5f9;
+    }
+
+    .date-picker-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .date-picker-wrap.date-picker-filter {
+      width: 160px;
+    }
+
+    .date-picker-wrap .date-text-input {
+      padding-right: 36px;
+    }
+
+    .date-picker-wrap.date-picker-filter .date-text-input {
+      height: 38px;
+    }
+
+    .date-cal-btn {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      z-index: 2;
+    }
+
+    .date-cal-btn:hover {
+      background: rgba(148, 163, 184, 0.16);
+      color: var(--text);
+    }
+
+    .date-native-proxy {
+      position: absolute;
+      right: 4px;
+      bottom: 0;
+      width: 30px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      border: 0;
+      padding: 0;
+    }
+
+    /* SCROLLABLE TABLE WRAPPER */
+    .table-wrapper {
+      overflow: auto;
+      max-inline-size: 100%;
+      max-block-size: clamp(640px, calc(100vh - 220px), 1080px);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.82rem;
+      text-align: left;
+    }
+
+    .data-table thead th {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 2;
+      background: #f8fafc;
+      color: var(--primary);
+      font-weight: 600;
+      padding: 11px 13px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    body.dark-mode .data-table thead th {
+      background: #1a243b;
+      color: #cbd5e1;
+    }
+
+    .data-table tbody td,
+    .data-table tbody th {
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .data-table tbody tr:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    body.dark-mode .data-table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .code-badge {
+      font-family: monospace;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(30, 53, 95, 0.08);
+      border: 1px solid rgba(30, 53, 95, 0.15);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    body.dark-mode .code-badge {
+      color: #93c5fd;
+      background: rgba(147, 197, 253, 0.12);
+      border-color: rgba(147, 197, 253, 0.25);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .status-badge.paid {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .status-badge.unpaid {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .summary-pill {
+      background: #e0f2fe;
+      color: #0284c7;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    body.dark-mode .summary-pill {
+      background: rgba(2, 132, 199, 0.18);
+      color: #38bdf8;
+    }
+
+    .btn-slip-row {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--primary);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+    }
+
+    .btn-slip-row:hover {
+      background: #f1f5f9;
+      border-color: var(--primary);
+    }
+
+    /* TENANT GRID */
+    .tenant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+    }
+
+    .tenant-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tenant-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    /* MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-surface);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 780px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 14px 20px;
+      background: var(--primary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: var(--bg);
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--text);
+    }
+
+    /* PRINTABLE SOA SLIP */
+    .soa-sheet {
+      background: #ffffff;
+      color: #0f172a;
+      padding: 22px 26px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.8rem;
+    }
+
+    .soa-sheet-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #1E355F;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .soa-meta-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 16px;
+      margin-bottom: 14px;
+      background: #f8fafc;
+      padding: 12px 14px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .soa-section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #1E355F;
+      margin: 12px 0 6px;
+    }
+
+    .soa-mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.77rem;
+      margin-bottom: 8px;
+    }
+
+    .soa-mini-table th,
+    .soa-mini-table td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+    }
+
+    .soa-mini-table th {
+      background: #f1f5f9;
+      color: #1E355F;
+      font-weight: 600;
+    }
+
+    .soa-sigs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 24px;
+      row-gap: 48px;
+      margin-top: 48px;
+      margin-bottom: 12px;
+      font-size: 0.74rem;
+    }
+
+    .soa-sig-box {
+      border-top: 1px solid #64748b;
+      padding-top: 6px;
+    }
+
+    @media (max-width: 960px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+
+      .main-content {
+        margin-left: 0;
+        max-width: 100vw;
+        padding: 18px 14px;
+      }
+
+      .header-center-title {
+        display: none;
+      }
+
+      .form-grid-2,
+      .form-grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+    /* DATA REGISTRY STYLES */
+    .registry-tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .registry-tab-btn {
+      padding: 10px 18px;
+      border-radius: 8px 8px 0 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      font-family: inherit;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+    }
+
+    .registry-tab-btn:hover {
+      color: var(--primary);
+      background: rgba(30, 53, 95, 0.05);
+    }
+
+    body.dark-mode .registry-tab-btn:hover {
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .registry-tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--accent);
+      background: rgba(252, 174, 22, 0.1);
+    }
+
+    body.dark-mode .registry-tab-btn.active {
+      color: var(--accent);
+    }
+
+    .registry-panel {
+      display: none;
+    }
+
+    .registry-panel.active {
+      display: block;
+      animation: fadeIn 0.22s ease;
+    }
+
+    .cat-badge-power {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .cat-badge-water {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .badge-status-active {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .badge-status-inactive {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .action-btn-sm {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 5px;
+      padding: 4px 8px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .action-btn-sm:hover {
+      background: var(--bg);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .action-btn-sm.danger:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .tariff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .tariff-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tariff-input-wrap {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .tariff-addon {
+      background: var(--bg);
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    body.dark-mode .tariff-addon {
+      background: #1e293b;
+      border-color: #334155;
+      color: #94a3b8;
+    }
+
+    .tariff-addon.prefix {
+      border-radius: 6px 0 0 6px;
+      border-right: none;
+    }
+
+    .tariff-addon.suffix {
+      border-radius: 0 6px 6px 0;
+      border-left: none;
+    }
+
+    .pm-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 3000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .pm-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .pm-toast.success {
+      background: #065f46;
+      border-left: 4px solid #10b981;
+    }
+
+    .pm-toast.warning {
+      background: #92400e;
+      border-left: 4px solid #f59e0b;
+    }
+
+    .pm-toast.danger {
+      background: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+    .pm-toast.info {
+      background: #1e3a8a;
+      border-left: 4px solid #38bdf8;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #modalSoaSlip,
+      #modalSoaSlip * {
+        visibility: visible;
+      }
+
+      #modalSoaSlip {
+        position: absolute;
+        inset: 0;
+        background: #ffffff;
+        padding: 0;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top-navbar">
+    <div class="header-left">
+      <button type="button" class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="brand-logo-wrap">
+        <img src="./RII_Logo.png" alt="R-II Builders" onerror="this.style.display='none'">
+        <h1>R-II BUILDERS, INC.</h1>
+      </div>
+    </div>
+
+    <div class="header-center-title">PROPERTY MANAGEMENT DASHBOARD</div>
+
+    <div class="header-right">
+      <button type="button" class="theme-toggle-btn" title="Toggle Dark/Light Mode" onclick="toggleTheme()"
+        aria-label="Toggle Dark or Light Mode">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+
+      <div class="user-profile-badge">
+        <span style="font-size:0.8rem; font-weight:600; color:white;">Property Admin</span>
+        <div class="user-avatar">PM</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <aside class="sidebar" id="pmSidebar">
+      <div class="sidebar-inner">
+        <div class="nav-group-title">Property Management</div>
+        <ul class="nav-list">
+          <li class="nav-item active" data-view="view-soa-list">
+            <a href="javascript:void(0)" onclick="switchView('view-soa-list', this)">
+              <div class="nav-label-wrap">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Admin Dashboard</span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item" data-view="view-readings">
+            <a href="javascript:void(0)" onclick="switchView('view-readings', this)">
+              <div class="nav-label-wrap">
+                <i class="fa-solid fa-gauge-high"></i>
+                <span>Meter Readings</span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item" data-view="view-shared-dues">
+            <a href="javascript:void(0)" onclick="switchView('view-shared-dues', this)">
+              <div class="nav-label-wrap">
+                <i class="fa-solid fa-building"></i>
+                <span>Shared Building Dues</span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item" data-view="view-data-registry">
+            <a href="javascript:void(0)" onclick="switchView('view-data-registry', this)">
+              <div class="nav-label-wrap">
+                <i class="fa-solid fa-database"></i>
+                <span>Data Registry</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <strong>Property Management Module</strong>
+        <span>R-II Builders, Inc. &copy; 2026</span>
+        <div style="font-size:0.68rem; color:var(--accent); font-weight:600; margin-top:2px;">developed by leo worksuite
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- VIEW 1: STATEMENT OF ACCOUNTS -->
+      <section id="view-soa-list" class="view-section active">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-file-invoice-dollar" style="color:var(--accent);"></i> Statement of Accounts &amp;
+              Billing</h2>
+            <p>Utility billing statements, sub-meter charges, 10% Admin Fee, System Loss, 12% VAT &amp; 2% EWT.</p>
+          </div>
+          <div class="view-action-group">
+            <button type="button" class="btn btn-accent" onclick="openAddReadingModal()">
+              <i class="fa-solid fa-plus"></i> Add Meter Reading
+            </button>
+            <button type="button" class="btn btn-primary" onclick="exportSoaSummaryCSV()">
+              <i class="fa-solid fa-file-csv"></i> Export SOA CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Total Statements</div>
+            <div class="kpi-value" id="kpiTotalSoas">0</div>
+            <div class="kpi-sub">Unique SOA references</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Total Net Billed</div>
+            <div class="kpi-value" id="kpiTotalNet" style="color:var(--primary);">₱ 0.00</div>
+            <div class="kpi-sub">Meter due + Admin Fee &amp; Loss</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Paid Total</div>
+            <div class="kpi-value" id="kpiPaidNet" style="color:var(--success);">₱ 0.00</div>
+            <div class="kpi-sub" id="kpiPaidCount">0 SOAs settled</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Unpaid Balance</div>
+            <div class="kpi-value" id="kpiUnpaidNet" style="color:var(--warning);">₱ 0.00</div>
+            <div class="kpi-sub" id="kpiUnpaidCount">0 SOAs pending</div>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-body">
+            <div class="toolbar-bar">
+              <div class="search-input-wrap">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="soaSearchInput" placeholder="Search SOA #, company, bill period..."
+                  oninput="renderSoaTable()">
+              </div>
+              <select id="soaCompanyFilter" onchange="renderSoaTable()" class="form-control-neat"
+                style="width:auto; height:38px; min-width:130px;" aria-label="Filter by Company">
+                <option value="ALL">All Companies</option>
+                <option value="PESC">PESC</option>
+                <option value="RBI">RBI</option>
+                <option value="RLDI">RLDI</option>
+                <option value="RMRCI">RMRCI</option>
+              </select>
+              <select id="soaStatusFilter" onchange="renderSoaTable()" class="form-control-neat"
+                style="width:auto; height:38px; min-width:130px;" aria-label="Filter by Payment Status">
+                <option value="ALL">All Statuses</option>
+                <option value="Unpaid">Unpaid</option>
+                <option value="Paid">Paid</option>
+              </select>
+              <select id="soaMonthFilter"
+                onchange="onMonthFilterChange('soaMonthFilter', 'soaDateFilter', renderSoaTable)"
+                class="form-control-neat" style="width:auto; height:38px; min-width:130px;"
+                aria-label="Filter SOA by month">
+                <option value="ALL">All Months</option>
+              </select>
+              <div class="date-picker-wrap date-picker-filter">
+                <input type="text" id="soaDateFilter" class="form-control-neat date-text-input"
+                  placeholder="12-Nov-2026" autocomplete="off" autocorrect="off" autocapitalize="none"
+                  spellcheck="false"
+                  oninput="if (!this.value.trim() || parseCalendarDateParts(this.value)) onDateFilterChange('soaDateFilter', 'soaMonthFilter', renderSoaTable)"
+                  onchange="onDateFilterChange('soaDateFilter', 'soaMonthFilter', renderSoaTable)"
+                  aria-label="Filter SOA by SOA Date (DD-MMM-YYYY)">
+                <button type="button" class="date-cal-btn" aria-label="Choose filter date from calendar"
+                  title="Pick date">
+                  <i class="fa-regular fa-calendar"></i>
+                </button>
+                <input type="date" class="date-native-proxy" tabindex="-1" aria-hidden="true">
+              </div>
+              <span id="soaSummaryPill" class="summary-pill">0 SOAs • ₱ 0.00</span>
+            </div>
+
+            <div tabindex="0" role="region" aria-labelledby="soaTableCaption" class="table-wrapper">
+              <table class="data-table">
+                <caption id="soaTableCaption" class="visually-hidden">Statement of Accounts Summary</caption>
+                <thead>
+                  <tr>
+                    <th>SOA No.</th>
+                    <th>Company</th>
+                    <th>Bill Period</th>
+                    <th>SOA Date</th>
+                    <th>Due Date</th>
+                    <th>Power Due</th>
+                    <th>Water Due</th>
+                    <th>Net Amount</th>
+                    <th>Payment Status</th>
+                    <th style="text-align:center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="soaTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: METER READINGS -->
+      <section id="view-readings" class="view-section">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-gauge-high" style="color:var(--accent);"></i> Meter Readings Ledger</h2>
+            <p>Detailed Power and Water sub-meter readings imported from Statement of Account.xlsx.</p>
+          </div>
+          <div class="view-action-group">
+            <button type="button" class="btn btn-accent" onclick="openAddReadingModal()">
+              <i class="fa-solid fa-plus"></i> Add Meter Reading
+            </button>
+            <button type="button" class="btn btn-primary" onclick="exportReadingsCSV()">
+              <i class="fa-solid fa-file-csv"></i> Export Readings CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-body">
+            <div class="toolbar-bar">
+              <div class="search-input-wrap">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="readSearchInput" placeholder="Search unit, SOA #, company, period..."
+                  oninput="renderReadingsTable()">
+              </div>
+              <select id="readCompanyFilter" onchange="renderReadingsTable()" class="form-control-neat"
+                style="width:auto; height:38px; min-width:130px;" aria-label="Filter readings by Company">
+                <option value="ALL">All Companies</option>
+                <option value="PESC">PESC</option>
+                <option value="RBI">RBI</option>
+                <option value="RLDI">RLDI</option>
+                <option value="RMRCI">RMRCI</option>
+              </select>
+              <select id="readCategoryFilter" onchange="renderReadingsTable()" class="form-control-neat"
+                style="width:auto; height:38px; min-width:130px;" aria-label="Filter readings by Category">
+                <option value="ALL">All Categories</option>
+                <option value="Power">Power</option>
+                <option value="Water">Water</option>
+              </select>
+              <span id="readSummaryPill" class="summary-pill">0 Readings • ₱ 0.00</span>
+            </div>
+
+            <div tabindex="0" role="region" aria-labelledby="readingsTableCaption" class="table-wrapper">
+              <table class="data-table">
+                <caption id="readingsTableCaption" class="visually-hidden">Meter Readings Ledger</caption>
+                <thead>
+                  <tr>
+                    <th>SOA No.</th>
+                    <th>Company</th>
+                    <th>Category</th>
+                    <th>Unit</th>
+                    <th>Meter Period</th>
+                    <th>Prev / Curr</th>
+                    <th>Consumption</th>
+                    <th>Rate</th>
+                    <th>Meter Due</th>
+                    <th>Net Amount</th>
+                    <th style="text-align:center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="readingsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: SHARED BUILDING DUES -->
+      <section id="view-shared-dues" class="view-section">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-building" style="color:var(--accent);"></i> Shared Building Dues &amp; Allocation
+            </h2>
+            <p>Fixed dues, annual building fees, and affiliate share averages (RMRCI, PESC, RBI, RLDI).</p>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              <i class="fa-solid fa-layer-group" style="color:var(--accent);"></i>
+              <span>Company Cost Allocation Averages (Ave Sheet)</span>
+            </div>
+          </div>
+          <div class="data-card-body">
+            <div class="table-wrapper" style="max-block-size:440px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Particulars</th>
+                    <th>Total Amount</th>
+                    <th>RMRCI</th>
+                    <th>PESC</th>
+                    <th>RBI</th>
+                    <th>RLDI</th>
+                  </tr>
+                </thead>
+                <tbody id="aveTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              <i class="fa-solid fa-calendar-check" style="color:var(--accent);"></i>
+              <span>Fixed Dues &amp; Annual Building Fees (Sheet2)</span>
+            </div>
+          </div>
+          <div class="data-card-body">
+            <div class="table-wrapper" style="max-block-size:500px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Particulars</th>
+                    <th>Type</th>
+                    <th>Fixed Dues</th>
+                    <th>Annual Fee</th>
+                    <th>Variable Avg</th>
+                    <th>Schedule</th>
+                    <th>Shared</th>
+                  </tr>
+                </thead>
+                <tbody id="fixedDuesTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: DATA REGISTRY -->
+      <section id="view-data-registry" class="view-section">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h2><i class="fa-solid fa-database" style="color:var(--accent);"></i> Data Registry &amp; Master Records
+            </h2>
+            <p>Central master repository for utility sub-meters, tenant companies, billing tariffs &amp; rates, building
+              spaces, and system data backups.</p>
+          </div>
+          <div class="view-action-group">
+            <button type="button" class="btn btn-accent" onclick="openRegisterMeterModal()">
+              <i class="fa-solid fa-plus"></i> Register Meter
+            </button>
+            <button type="button" class="btn btn-primary" onclick="openRegisterTenantModal()">
+              <i class="fa-solid fa-building-user"></i> Register Tenant
+            </button>
+            <button type="button" class="btn btn-outline" onclick="exportRegistryJSON()">
+              <i class="fa-solid fa-file-export"></i> Export JSON
+            </button>
+            <button type="button" class="btn btn-outline"
+              onclick="document.getElementById('importRegistryFileInput').click()">
+              <i class="fa-solid fa-file-import"></i> Import Backup
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI SUMMARY CARDS FOR REGISTRY -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Registered Sub-Meters</div>
+            <div class="kpi-value" id="regKpiTotalMeters">0</div>
+            <div class="kpi-sub" id="regKpiMetersBreakdown">0 Power • 0 Water</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Registered Tenants</div>
+            <div class="kpi-value" id="regKpiTotalTenants">0</div>
+            <div class="kpi-sub" id="regKpiTenantsActive">0 Active Occupants</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Active Power Tariff</div>
+            <div class="kpi-value" id="regKpiPowerRate">₱ 0.00</div>
+            <div class="kpi-sub">Standard per kWh rate</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Active Water Tariff</div>
+            <div class="kpi-value" id="regKpiWaterRate">₱ 0.00</div>
+            <div class="kpi-sub">Standard per cu.m rate</div>
+          </div>
+        </div>
+
+        <!-- REGISTRY TABS -->
+        <div class="registry-tabs">
+          <button type="button" class="registry-tab-btn active" id="btnTabMeters"
+            onclick="switchRegistryTab('meters', this)">
+            <i class="fa-solid fa-gauge-high"></i> Sub-Meters Master
+          </button>
+          <button type="button" class="registry-tab-btn" id="btnTabTenants"
+            onclick="switchRegistryTab('tenants', this)">
+            <i class="fa-solid fa-building-user"></i> Tenant Companies
+          </button>
+          <button type="button" class="registry-tab-btn" id="btnTabTariffs"
+            onclick="switchRegistryTab('tariffs', this)">
+            <i class="fa-solid fa-coins"></i> Billing Tariffs &amp; Rates
+          </button>
+          <button type="button" class="registry-tab-btn" id="btnTabSpaces" onclick="switchRegistryTab('spaces', this)">
+            <i class="fa-solid fa-city"></i> Building Spaces &amp; Floors
+          </button>
+          <button type="button" class="registry-tab-btn" id="btnTabBackup" onclick="switchRegistryTab('backup', this)">
+            <i class="fa-solid fa-server"></i> Database &amp; Maintenance
+          </button>
+        </div>
+
+        <!-- PANEL 1: METERS REGISTRY -->
+        <div id="regPanelMeters" class="registry-panel active">
+          <div class="data-card">
+            <div class="data-card-body">
+              <div class="toolbar-bar">
+                <div class="search-input-wrap">
+                  <i class="fa-solid fa-search"></i>
+                  <input type="text" id="regMeterSearchInput" placeholder="Search meter code, company, floor, serial..."
+                    oninput="renderRegistryMetersTable()">
+                </div>
+                <select id="regMeterTypeFilter" onchange="renderRegistryMetersTable()" class="form-control-neat"
+                  style="width:auto; height:38px; min-width:130px;" aria-label="Filter by Utility Category">
+                  <option value="ALL">All Utilities</option>
+                  <option value="Power">⚡ Power</option>
+                  <option value="Water">💧 Water</option>
+                </select>
+                <select id="regMeterCompanyFilter" onchange="renderRegistryMetersTable()" class="form-control-neat"
+                  style="width:auto; height:38px; min-width:140px;" aria-label="Filter by Tenant Company">
+                  <option value="ALL">All Companies</option>
+                </select>
+                <select id="regMeterStatusFilter" onchange="renderRegistryMetersTable()" class="form-control-neat"
+                  style="width:auto; height:38px; min-width:130px;" aria-label="Filter by Active Status">
+                  <option value="ALL">All Statuses</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <span id="regMetersPill" class="summary-pill">0 Meters</span>
+                <button type="button" class="btn btn-outline" onclick="exportMetersCSV()" style="height:38px;">
+                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Meter Code</th>
+                      <th>Category</th>
+                      <th>Tenant / Company</th>
+                      <th>Floor / Location</th>
+                      <th>Serial No.</th>
+                      <th>Multiplier</th>
+                      <th>Last Reading</th>
+                      <th>Total Lifetime Consumed</th>
+                      <th>Status</th>
+                      <th style="text-align:center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="regMetersTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 2: TENANTS REGISTRY -->
+        <div id="regPanelTenants" class="registry-panel">
+          <div class="data-card">
+            <div class="data-card-body">
+              <div class="toolbar-bar">
+                <div class="search-input-wrap">
+                  <i class="fa-solid fa-search"></i>
+                  <input type="text" id="regTenantSearchInput" placeholder="Search company code, name, contact..."
+                    oninput="renderRegistryTenantsTable()">
+                </div>
+                <span id="regTenantsPill" class="summary-pill">0 Companies</span>
+                <button type="button" class="btn btn-accent" onclick="openRegisterTenantModal()" style="height:38px;">
+                  <i class="fa-solid fa-plus"></i> Add New Company
+                </button>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Company Name</th>
+                      <th>Registered Premises</th>
+                      <th>Contact Person</th>
+                      <th>Contact Details</th>
+                      <th>Assigned Meters</th>
+                      <th>Status</th>
+                      <th style="text-align:center;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="regTenantsTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 3: TARIFFS & BILLING RATES -->
+        <div id="regPanelTariffs" class="registry-panel">
+          <div class="data-card">
+            <div class="data-card-header">
+              <div class="data-card-title">
+                <i class="fa-solid fa-sliders" style="color:var(--accent);"></i>
+                <span>Utility Tariffs &amp; Regulatory Billing Parameters</span>
+              </div>
+              <span style="font-size:0.75rem; color:var(--text-muted);" id="tariffLastUpdatedBadge">Active Master
+                Rates</span>
+            </div>
+            <div class="data-card-body">
+              <form id="formTariffs" onsubmit="handleSaveTariffsSubmit(event)">
+                <div class="tariff-grid">
+                  <div class="tariff-card">
+                    <label
+                      style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">⚡
+                      Electricity Base Rate</label>
+                    <div class="tariff-input-wrap">
+                      <span class="tariff-addon prefix">₱</span>
+                      <input type="number" step="0.0001" id="tariffPowerRate" required class="form-control-neat"
+                        style="border-radius:0;" oninput="recalcTariffSimulation()">
+                      <span class="tariff-addon suffix">/ kWh</span>
+                    </div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Standard Meralco generation
+                      &amp; distribution base rate.</div>
+                  </div>
+
+                  <div class="tariff-card">
+                    <label
+                      style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">💧
+                      Water Base Rate</label>
+                    <div class="tariff-input-wrap">
+                      <span class="tariff-addon prefix">₱</span>
+                      <input type="number" step="0.0001" id="tariffWaterRate" required class="form-control-neat"
+                        style="border-radius:0;" oninput="recalcTariffSimulation()">
+                      <span class="tariff-addon suffix">/ cu.m</span>
+                    </div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Maynilad consumption tariff
+                      rate.</div>
+                  </div>
+
+                  <div class="tariff-card">
+                    <label
+                      style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Admin
+                      Fee Rate</label>
+                    <div class="tariff-input-wrap">
+                      <input type="number" step="0.1" id="tariffAdminFeePct" required class="form-control-neat"
+                        style="border-radius:6px 0 0 6px;" oninput="recalcTariffSimulation()">
+                      <span class="tariff-addon suffix">%</span>
+                    </div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">10% Property management
+                      billing surcharge (inc. of VAT).</div>
+                  </div>
+
+                  <div class="tariff-card">
+                    <label
+                      style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Value-Added
+                      Tax (VAT)</label>
+                    <div class="tariff-input-wrap">
+                      <input type="number" step="0.1" id="tariffVatPct" required class="form-control-neat"
+                        style="border-radius:6px 0 0 6px;" oninput="recalcTariffSimulation()">
+                      <span class="tariff-addon suffix">%</span>
+                    </div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">12% BIR statutory sales tax
+                      embedded in sub-meter bills.</div>
+                  </div>
+
+                  <div class="tariff-card">
+                    <label
+                      style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Expanded
+                      Withholding Tax (EWT)</label>
+                    <div class="tariff-input-wrap">
+                      <input type="number" step="0.1" id="tariffEwtPct" required class="form-control-neat"
+                        style="border-radius:6px 0 0 6px;" oninput="recalcTariffSimulation()">
+                      <span class="tariff-addon suffix">%</span>
+                    </div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">2% BIR Creditable
+                      withholding tax deducted by tenants.</div>
+                  </div>
+
+                  <div class="tariff-card">
+                    <label
+                      style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">System
+                      Loss Allocation Factor</label>
+                    <div class="tariff-input-wrap">
+                      <input type="number" step="0.01" id="tariffSysLossPct" required class="form-control-neat"
+                        style="border-radius:6px 0 0 6px;" oninput="recalcTariffSimulation()">
+                      <span class="tariff-addon suffix">%</span>
+                    </div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Transformer &amp;
+                      distribution line loss allowance factor.</div>
+                  </div>
+                </div>
+
+                <!-- LIVE SIMULATION CARD -->
+                <div
+                  style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:16px 20px; margin-bottom:18px;">
+                  <div style="font-weight:700; font-size:0.88rem; color:var(--primary); margin-bottom:10px;">
+                    <i class="fa-solid fa-calculator" style="color:var(--accent);"></i> Live Billing Simulation Preview
+                    (Sample 100 kWh Power Consumption)
+                  </div>
+                  <div
+                    style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; font-size:0.8rem;">
+                    <div><span style="color:var(--text-muted);">Base Amount:</span> <strong id="simBaseAmt">₱
+                        0.00</strong></div>
+                    <div><span style="color:var(--text-muted);">Admin Fee (10%):</span> <strong id="simAdminAmt">₱
+                        0.00</strong></div>
+                    <div><span style="color:var(--text-muted);">Less 2% EWT:</span> <strong id="simEwtAmt"
+                        style="color:var(--danger);">(₱ 0.00)</strong></div>
+                    <div><span style="color:var(--text-muted);">Est. Net Billed:</span> <strong id="simNetAmt"
+                        style="color:var(--success); font-size:0.92rem;">₱ 0.00</strong></div>
+                  </div>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:10px;">
+                  <button type="button" class="btn btn-outline" onclick="resetTariffsToDefault()">Reset
+                    Defaults</button>
+                  <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Active
+                    Tariffs</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 4: BUILDING SPACES & FLOORS -->
+        <div id="regPanelSpaces" class="registry-panel">
+          <div class="data-card">
+            <div class="data-card-body">
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Space / Floor Code</th>
+                      <th>Premises Description</th>
+                      <th>Floor Area</th>
+                      <th>Primary Occupant / Leased To</th>
+                      <th>Assigned Power Meters</th>
+                      <th>Assigned Water Meters</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="regSpacesTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 5: DATABASE MAINTENANCE & TOOLS -->
+        <div id="regPanelBackup" class="registry-panel">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:18px;">
+            <div class="data-card">
+              <div class="data-card-header">
+                <div class="data-card-title"><i class="fa-solid fa-file-export" style="color:var(--accent);"></i> Export
+                  JSON Database</div>
+              </div>
+              <div class="data-card-body" style="font-size:0.83rem;">
+                <p style="color:var(--text-muted); margin-bottom:14px;">Download a complete JSON snapshot containing all
+                  Statements of Account, meter readings ledger, meter registry, tenant companies, and tariff
+                  configurations.</p>
+                <button type="button" class="btn btn-primary" onclick="exportRegistryJSON()"><i
+                    class="fa-solid fa-download"></i> Download Full JSON Backup</button>
+              </div>
+            </div>
+
+            <div class="data-card">
+              <div class="data-card-header">
+                <div class="data-card-title"><i class="fa-solid fa-file-import" style="color:var(--accent);"></i>
+                  Restore / Import JSON</div>
+              </div>
+              <div class="data-card-body" style="font-size:0.83rem;">
+                <p style="color:var(--text-muted); margin-bottom:14px;">Restore or merge Property Management database
+                  records from a previously exported backup JSON file.</p>
+                <button type="button" class="btn btn-outline"
+                  onclick="document.getElementById('importRegistryFileInput').click()"><i
+                    class="fa-solid fa-upload"></i> Select Backup File</button>
+              </div>
+            </div>
+
+            <div class="data-card">
+              <div class="data-card-header">
+                <div class="data-card-title"><i class="fa-solid fa-rotate-left" style="color:var(--danger);"></i> Reset
+                  to Seed Data</div>
+              </div>
+              <div class="data-card-body" style="font-size:0.83rem;">
+                <p style="color:var(--text-muted); margin-bottom:14px;">Clear modified localStorage data and restore
+                  original Statement of Account.xlsx seed baseline.</p>
+                <button type="button" class="btn btn-outline" style="color:var(--danger); border-color:#fca5a5;"
+                  onclick="confirmResetSeedData()"><i class="fa-solid fa-trash-can"></i> Restore Factory Seed</button>
+              </div>
+            </div>
+
+            <div class="data-card">
+              <div class="data-card-header">
+                <div class="data-card-title"><i class="fa-solid fa-server" style="color:var(--info);"></i> Registry
+                  Storage Metrics</div>
+              </div>
+              <div class="data-card-body" style="font-size:0.83rem;">
+                <div
+                  style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+                  <span>Meter Readings Stored:</span> <strong id="regStorageReadingsCount">0</strong>
+                </div>
+                <div
+                  style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+                  <span>Registered Sub-Meters:</span> <strong id="regStorageMetersCount">0</strong>
+                </div>
+                <div
+                  style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+                  <span>Registered Tenants:</span> <strong id="regStorageTenantsCount">0</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:6px 0;">
+                  <span>LocalStorage Footprint:</span> <strong id="regStorageSize">0 KB</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: ADD / EDIT METER READING (MULTI-ITEM SOA) -->
+  <div class="modal-overlay" id="modalAddReading">
+    <div class="modal-box" style="max-width:1180px; width:94%;">
+      <div class="modal-header">
+        <h3 id="modalReadingTitle"><i class="fa-solid fa-gauge-high" style="color:var(--accent);"></i> Record Meter Readings</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modalAddReading')"
+          aria-label="Close">&times;</button>
+      </div>
+      <form id="formAddReading" onsubmit="handleAddReadingSubmit(event)">
+        <input type="hidden" id="mReadEditId" value="">
+        <div class="modal-body" style="padding:22px 24px;">
+          <div class="form-grid-3" style="margin-bottom:14px; gap:16px;">
+            <div class="form-group">
+              <label for="mReadCompany">Company *</label>
+              <select id="mReadCompany" required class="form-control-neat" onchange="onModalCompanyChange()">
+                <option value="PESC">PESC</option>
+                <option value="RBI">RBI</option>
+                <option value="RLDI">RLDI</option>
+                <option value="RMRCI">RMRCI</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mReadSoaNo">SOA No. *</label>
+              <input type="text" id="mReadSoaNo" required class="form-control-neat" placeholder="e.g. RLDI-U2026-0008">
+            </div>
+            <div class="form-group">
+              <label for="mReadPeriod">Billing Period *</label>
+              <input type="text" id="mReadPeriod" required class="form-control-neat" placeholder="e.g. 24Jul2026 - 23Aug2026">
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom:18px; gap:16px;">
+            <div class="form-group">
+              <label for="mReadSoaDate">SOA Date *</label>
+              <div class="date-picker-wrap">
+                <input type="text" id="mReadSoaDate" required class="form-control-neat date-text-input"
+                  placeholder="12-Nov-2026" autocomplete="off" spellcheck="false">
+                <button type="button" class="date-cal-btn" aria-label="Choose SOA date from calendar" title="Pick date">
+                  <i class="fa-regular fa-calendar"></i>
+                </button>
+                <input type="date" class="date-native-proxy" tabindex="-1" aria-hidden="true">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="mReadDueDate">Due Date *</label>
+              <div class="date-picker-wrap">
+                <input type="text" id="mReadDueDate" required class="form-control-neat date-text-input"
+                  placeholder="12-Nov-2026" autocomplete="off" spellcheck="false">
+                <button type="button" class="date-cal-btn" aria-label="Choose Due date from calendar" title="Pick date">
+                  <i class="fa-regular fa-calendar"></i>
+                </button>
+                <input type="date" class="date-native-proxy" tabindex="-1" aria-hidden="true">
+              </div>
+            </div>
+          </div>
+
+          <!-- METER ITEMS SECTION WITH "+ ADD ITEM" -->
+          <div style="border-top:1px solid var(--border); padding-top:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+              <div style="font-weight:700; font-size:0.92rem; color:var(--primary); display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-list-check" style="color:var(--accent); font-size:1rem;"></i>
+                <span>Sub-Meter Readings (Power &amp; Water)</span>
+                <span id="mItemsCountBadge" class="summary-pill" style="font-size:0.75rem; padding:3px 10px;">1 Meter</span>
+              </div>
+              <div style="display:flex; gap:10px;">
+                <button type="button" class="btn btn-outline" style="padding:6px 14px; font-size:0.8rem;" onclick="autoLoadCompanyMetersIntoModal()" title="Load all registered Power and Water meters for this company">
+                  <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent);"></i> Load Company Meters
+                </button>
+                <button type="button" class="btn btn-accent" style="padding:6px 14px; font-size:0.8rem;" onclick="addMeterItemRow()" title="Add another meter row">
+                  <i class="fa-solid fa-plus"></i> Add Item
+                </button>
+              </div>
+            </div>
+
+            <div class="table-wrapper" style="max-height:360px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <table class="data-table" style="font-size:0.83rem;">
+                <thead>
+                  <tr>
+                    <th style="width:145px;">Category</th>
+                    <th>Meter Unit *</th>
+                    <th style="width:115px; text-align:right;">Previous</th>
+                    <th style="width:115px; text-align:right;">Current *</th>
+                    <th style="width:100px; text-align:right;">Cons.</th>
+                    <th style="width:115px; text-align:right;">Rate (₱) *</th>
+                    <th style="width:130px; text-align:right;">Amount Due</th>
+                    <th style="width:45px; text-align:center;"></th>
+                  </tr>
+                </thead>
+                <tbody id="mItemsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUMMARY PREVIEW -->
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:14px 18px; margin-top:16px; display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:14px; font-size:0.82rem;">
+            <div><span style="color:var(--text-muted); display:block; font-size:0.76rem; margin-bottom:2px;">Power Total (Less EWT):</span> <strong id="mReadPowerSummary" style="color:var(--primary); font-size:0.92rem;">₱ 0.00</strong></div>
+            <div><span style="color:var(--text-muted); display:block; font-size:0.76rem; margin-bottom:2px;">Water Total (Less EWT):</span> <strong id="mReadWaterSummary" style="color:var(--info); font-size:0.92rem;">₱ 0.00</strong></div>
+            <div><span style="color:var(--text-muted); display:block; font-size:0.76rem; margin-bottom:2px;">Admin Fee (10%):</span> <strong id="mReadAdminSummary" style="font-size:0.92rem;">₱ 0.00</strong></div>
+            <div><span style="color:var(--text-muted); display:block; font-size:0.76rem; margin-bottom:2px;">Less 2% EWT:</span> <strong id="mReadEwtSummary" style="color:var(--danger); font-size:0.92rem;">(₱ 0.00)</strong></div>
+            <div><span style="color:var(--text-muted); display:block; font-size:0.76rem; margin-bottom:2px;">Total Net Billed:</span> <strong id="mReadNetPreview" style="color:var(--success); font-size:1.02rem;">₱ 0.00</strong></div>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:14px 24px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalAddReading')">Cancel</button>
+          <button type="submit" id="btnSaveReadingSubmit" class="btn btn-primary" style="padding:8px 18px;"><i class="fa-solid fa-save"></i> Save Readings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PRINTABLE SOA SLIP -->
+  <div class="modal-overlay" id="modalSoaSlip">
+    <div class="modal-box" style="max-width:860px;">
+      <div class="modal-header no-print">
+        <h3><i class="fa-solid fa-file-invoice" style="color:var(--accent);"></i> Statement of Account Slip</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modalSoaSlip')"
+          aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" id="soaSlipContainer"></div>
+      <div class="modal-footer no-print">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modalSoaSlip')">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print
+          SOA</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTER / EDIT METER -->
+  <div class="modal-overlay" id="modalRegisterMeter">
+    <div class="modal-box" style="max-width:620px;">
+      <div class="modal-header">
+        <h3 id="modalRegisterMeterTitle"><i class="fa-solid fa-gauge-high" style="color:var(--accent);"></i> Register
+          Sub-Meter</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modalRegisterMeter')"
+          aria-label="Close">&times;</button>
+      </div>
+      <form id="formRegisterMeter" onsubmit="handleSaveMeterSubmit(event)">
+        <input type="hidden" id="regMeterEditOriginalCode" value="">
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="regMeterCode">Meter Unit Code *</label>
+              <input type="text" id="regMeterCode" required class="form-control-neat" placeholder="e.g. 5F-RLDI-SM05">
+            </div>
+            <div class="form-group">
+              <label for="regMeterCategory">Utility Category *</label>
+              <select id="regMeterCategory" required class="form-control-neat">
+                <option value="Power">Power (Electricity)</option>
+                <option value="Water">Water</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="regMeterCompany">Assigned Tenant / Company *</label>
+              <select id="regMeterCompany" required class="form-control-neat"></select>
+            </div>
+            <div class="form-group">
+              <label for="regMeterFloor">Floor / Location *</label>
+              <input type="text" id="regMeterFloor" required class="form-control-neat"
+                placeholder="e.g. 5th Floor / East Wing">
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="regMeterSerial">Hardware Serial No.</label>
+              <input type="text" id="regMeterSerial" class="form-control-neat" placeholder="e.g. MTR-2026-098">
+            </div>
+            <div class="form-group">
+              <label for="regMeterMultiplier">Multiplier</label>
+              <input type="number" step="0.01" id="regMeterMultiplier" class="form-control-neat" value="1.0">
+            </div>
+            <div class="form-group">
+              <label for="regMeterStatus">Status *</label>
+              <select id="regMeterStatus" required class="form-control-neat">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="regMeterInitialReading">Initial / Baseline Reading</label>
+              <input type="number" step="0.001" id="regMeterInitialReading" class="form-control-neat" value="0">
+            </div>
+            <div class="form-group">
+              <label for="regMeterLastReading">Current / Latest Reading</label>
+              <input type="number" step="0.001" id="regMeterLastReading" class="form-control-neat" value="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regMeterDescription">Description / Notes</label>
+            <input type="text" id="regMeterDescription" class="form-control-neat"
+              placeholder="Optional remarks, breaker tag, location details...">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalRegisterMeter')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Save Meter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTER / EDIT TENANT -->
+  <div class="modal-overlay" id="modalRegisterTenant">
+    <div class="modal-box" style="max-width:620px;">
+      <div class="modal-header">
+        <h3 id="modalRegisterTenantTitle"><i class="fa-solid fa-building-user" style="color:var(--accent);"></i>
+          Register Tenant Company</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modalRegisterTenant')"
+          aria-label="Close">&times;</button>
+      </div>
+      <form id="formRegisterTenant" onsubmit="handleSaveTenantSubmit(event)">
+        <input type="hidden" id="regTenantEditOriginalCode" value="">
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="regTenantCode">Company Code *</label>
+              <input type="text" id="regTenantCode" required class="form-control-neat" placeholder="e.g. RLDI">
+            </div>
+            <div class="form-group">
+              <label for="regTenantStatus">Status *</label>
+              <select id="regTenantStatus" required class="form-control-neat">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="regTenantName">Registered Full Name *</label>
+            <input type="text" id="regTenantName" required class="form-control-neat"
+              placeholder="e.g. RLAND Development, Inc.">
+          </div>
+
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="regTenantAddress">Registered Address / Premises in Building *</label>
+            <input type="text" id="regTenantAddress" required class="form-control-neat"
+              placeholder="e.g. 5th Floor, 136 R-II Building, Malakas Street, Diliman, Quezon City">
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="regTenantContact">Contact Person</label>
+              <input type="text" id="regTenantContact" class="form-control-neat" placeholder="e.g. Finance Officer">
+            </div>
+            <div class="form-group">
+              <label for="regTenantEmail">Email</label>
+              <input type="email" id="regTenantEmail" class="form-control-neat" placeholder="billing@company.ph">
+            </div>
+            <div class="form-group">
+              <label for="regTenantPhone">Phone</label>
+              <input type="text" id="regTenantPhone" class="form-control-neat" placeholder="(02) 8924-xxxx">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalRegisterTenant')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Save Company</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIRM FACTORY RESET -->
+  <div class="modal-overlay" id="modalResetConfirm">
+    <div class="modal-box" style="max-width:480px;">
+      <div class="modal-header" style="background:var(--danger);">
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> Reset Database</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modalResetConfirm')"
+          aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" style="font-size:0.86rem; line-height:1.6;">
+        <p><strong>Are you sure you want to restore original seed data?</strong></p>
+        <p style="color:var(--text-muted); margin-top:8px;">This will restore all Statement of Account records, meter
+          readings, company registers, and tariff defaults back to the official <em>Statement of Account.xlsx</em>
+          baseline. Any newly recorded meter readings in this session will be reset.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modalResetConfirm')">Cancel</button>
+        <button type="button" class="btn" style="background:var(--danger); color:white;"
+          onclick="executeResetSeedData()"><i class="fa-solid fa-rotate-left"></i> Yes, Restore Seed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="pmToast" class="pm-toast" role="status" aria-live="polite">
+    <i id="pmToastIcon" class="fa-solid fa-circle-check"></i>
+    <span id="pmToastMsg">Action completed successfully</span>
+  </div>
+
+  <!-- HIDDEN FILE INPUT FOR IMPORT -->
+  <input type="file" id="importRegistryFileInput" accept=".json" style="display:none;"
+    onchange="importRegistryJSON(event)">
+
+  <script>
+    const PM_SOA_STORAGE_KEY = 'pm_soa_readings_v1';
+    const PM_COMPANIES_STORAGE_KEY = 'pm_soa_companies_v1';
+    const PM_METERS_STORAGE_KEY = 'pm_soa_meters_v1';
+    const PM_TARIFFS_STORAGE_KEY = 'pm_soa_tariffs_v1';
+    const PM_SPACES_STORAGE_KEY = 'pm_soa_spaces_v1';
+
+    const DATE_MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const DATE_MONTH_LOOKUP = DATE_MONTH_ABBR.reduce((acc, m, idx) => {
+      acc[m.toLowerCase()] = idx + 1;
+      return acc;
+    }, { sept: 9 });
+
+    let readings = [];
+    let companyDirectory = {};
+    let meters = [];
+    let tariffs = {
+      power_rate: 15.23,
+      water_rate: 161.87,
+      admin_fee_pct: 10,
+      vat_pct: 12,
+      ewt_pct: 2,
+      system_loss_pct: 1.95,
+      last_updated: '2026-11-12'
+    };
+    let spaces = [];
+    let fixedDues = [];
+    let costAverages = [];
+
+    function formatCurrency(val) {
+      const num = parseFloat(val) || 0;
+      return '₱ ' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getTodayPlainYmd() {
+      if (typeof Temporal !== 'undefined' && Temporal.Now?.plainDateISO) {
+        const pd = Temporal.Now.plainDateISO();
+        return { year: pd.year, month: pd.month, day: pd.day };
+      }
+      const now = new Date();
+      return { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+    }
+
+    function isValidCalendarYmd(year, month, day) {
+      if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return false;
+      if (month < 1 || month > 12 || day < 1 || day > 31) return false;
+      if (typeof Temporal !== 'undefined' && Temporal.PlainDate?.from) {
+        try {
+          Temporal.PlainDate.from({ year, month, day }, { overflow: 'reject' });
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+      const dt = new Date(year, month - 1, day);
+      return dt.getFullYear() === year && dt.getMonth() === month - 1 && dt.getDate() === day;
+    }
+
+    function parseCalendarDateParts(val) {
+      if (val === null || val === undefined) return null;
+      const s = String(val).trim();
+      if (!s || s === '—' || s === '-') return null;
+
+      let m = s.match(/^(\d{1,2})[-\s]([A-Za-z]{3,4})[-\s,]+(\d{4})$/);
+      if (m) {
+        const day = parseInt(m[1], 10);
+        const month = DATE_MONTH_LOOKUP[m[2].toLowerCase()];
+        const year = parseInt(m[3], 10);
+        return (month && isValidCalendarYmd(year, month, day)) ? { year, month, day } : null;
+      }
+
+      m = s.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[T\s].*)?$/);
+      if (m) {
+        const year = parseInt(m[1], 10);
+        const month = parseInt(m[2], 10);
+        const day = parseInt(m[3], 10);
+        return isValidCalendarYmd(year, month, day) ? { year, month, day } : null;
+      }
+
+      m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (m) {
+        const a = parseInt(m[1], 10);
+        const b = parseInt(m[2], 10);
+        const year = parseInt(m[3], 10);
+        const month = (a > 12 && b <= 12) ? b : a;
+        const day = (a > 12 && b <= 12) ? a : b;
+        return isValidCalendarYmd(year, month, day) ? { year, month, day } : null;
+      }
+
+      const dt = new Date(s);
+      if (!isNaN(dt.getTime())) {
+        return { year: dt.getFullYear(), month: dt.getMonth() + 1, day: dt.getDate() };
+      }
+      return null;
+    }
+
+    function formatDisplayDate(val, fallback = '—') {
+      if (val === null || val === undefined || String(val).trim() === '') return fallback;
+      const parts = parseCalendarDateParts(val);
+      if (!parts) return String(val).trim() || fallback;
+      return `${String(parts.day).padStart(2, '0')}-${DATE_MONTH_ABBR[parts.month - 1]}-${parts.year}`;
+    }
+
+    function formatTodayDisplayDate() {
+      const { year, month, day } = getTodayPlainYmd();
+      return `${String(day).padStart(2, '0')}-${DATE_MONTH_ABBR[month - 1]}-${year}`;
+    }
+
+    function tryToIsoDate(dStr) {
+      const parts = parseCalendarDateParts(dStr);
+      if (!parts) return '';
+      return `${parts.year}-${String(parts.month).padStart(2, '0')}-${String(parts.day).padStart(2, '0')}`;
+    }
+
+    function setFormattedDateInputValue(id, val) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const formatted = val ? formatDisplayDate(val, '') : '';
+      el.value = formatted;
+      el.setCustomValidity?.('');
+      const proxy = el.closest?.('.date-picker-wrap')?.querySelector?.('.date-native-proxy');
+      if (proxy) proxy.value = tryToIsoDate(formatted || val);
+    }
+
+    function initFormattedDateInputs() {
+      document.querySelectorAll('.date-picker-wrap').forEach((wrap) => {
+        if (wrap.dataset.dateInit === '1') return;
+        wrap.dataset.dateInit = '1';
+        const textInput = wrap.querySelector('.date-text-input');
+        const calBtn = wrap.querySelector('.date-cal-btn');
+        const proxy = wrap.querySelector('.date-native-proxy');
+        if (!textInput) return;
+
+        textInput.addEventListener('input', () => textInput.setCustomValidity(''));
+        const normalize = () => {
+          const raw = (textInput.value || '').trim();
+          if (!raw) { textInput.setCustomValidity(''); if (proxy) proxy.value = ''; return; }
+          const iso = tryToIsoDate(raw);
+          if (iso) {
+            textInput.value = formatDisplayDate(iso);
+            textInput.setCustomValidity('');
+            if (proxy) proxy.value = iso;
+          } else {
+            textInput.setCustomValidity('Please enter date as 12-Nov-2026 (DD-MMM-YYYY).');
+          }
+        };
+        textInput.addEventListener('blur', normalize);
+        textInput.addEventListener('change', normalize);
+
+        if (calBtn && proxy) {
+          calBtn.addEventListener('click', () => {
+            const iso = tryToIsoDate(textInput.value);
+            if (iso) proxy.value = iso;
+            try {
+              if (typeof proxy.showPicker === 'function') proxy.showPicker();
+              else { proxy.style.pointerEvents = 'auto'; proxy.focus(); proxy.click(); proxy.style.pointerEvents = 'none'; }
+            } catch (e) { textInput.focus(); }
+          });
+          proxy.addEventListener('change', () => {
+            textInput.value = proxy.value ? formatDisplayDate(proxy.value) : '';
+            textInput.setCustomValidity('');
+            textInput.dispatchEvent(new Event('change', { bubbles: true }));
+          });
+        }
+      });
+    }
+
+    function populateMonthFilterOptions(selectId, items, dateGetter) {
+      const sel = document.getElementById(selectId);
+      if (!sel) return;
+      const prev = sel.value || 'ALL';
+      const keys = new Set();
+      (items || []).forEach(it => {
+        const iso = tryToIsoDate(dateGetter(it));
+        if (iso && iso.length >= 7) keys.add(iso.slice(0, 7));
+      });
+      const sorted = Array.from(keys).sort((a, b) => b.localeCompare(a));
+      sel.innerHTML = '<option value="ALL">All Months</option>' + sorted.map(ym => {
+        const [y, m] = ym.split('-').map(Number);
+        return `<option value="${ym}">${DATE_MONTH_ABBR[m - 1]}-${y}</option>`;
+      }).join('');
+      sel.value = sorted.includes(prev) ? prev : 'ALL';
+    }
+
+    function matchesDateOrMonth(recordDate, dateInputId, monthSelectId) {
+      const dateIso = tryToIsoDate(document.getElementById(dateInputId)?.value || '');
+      const monthVal = document.getElementById(monthSelectId)?.value || 'ALL';
+      const recIso = tryToIsoDate(recordDate);
+      if (dateIso) return recIso === dateIso;
+      if (monthVal && monthVal !== 'ALL') return Boolean(recIso && recIso.startsWith(monthVal));
+      return true;
+    }
+
+    function onMonthFilterChange(monthSelectId, dateInputId, renderFn) {
+      if ((document.getElementById(monthSelectId)?.value || 'ALL') !== 'ALL') {
+        setFormattedDateInputValue(dateInputId, '');
+      }
+      renderFn();
+    }
+
+    function onDateFilterChange(dateInputId, monthSelectId, renderFn) {
+      const dateIso = tryToIsoDate(document.getElementById(dateInputId)?.value || '');
+      const monthEl = document.getElementById(monthSelectId);
+      if (dateIso && monthEl) monthEl.value = 'ALL';
+      renderFn();
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('pm_theme', isDark ? 'dark' : 'light');
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    function toggleMobileSidebar() {
+      document.getElementById('pmSidebar')?.classList.toggle('open');
+    }
+
+    function switchView(viewId, anchorEl) {
+      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId)?.classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      anchorEl?.closest('.nav-item')?.classList.add('active');
+      document.getElementById('pmSidebar')?.classList.remove('open');
+      if (viewId === 'view-data-registry') {
+        renderDataRegistry();
+      }
+    }
+
+    function openModal(id) {
+      document.getElementById(id)?.classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id)?.classList.remove('open');
+    }
+
+    function buildGroupedSoas(list) {
+      const map = new Map();
+      (list || []).forEach(r => {
+        const key = r.soa_no || `${r.company}-${r.bill_period}`;
+        if (!map.has(key)) {
+          map.set(key, {
+            soa_no: key,
+            company: r.company,
+            bill_period: r.bill_period || '—',
+            soa_date: r.soa_date || '',
+            due_date: r.due_date || '',
+            power_due: 0,
+            water_due: 0,
+            vat_total: 0,
+            ewt_total: 0,
+            admin_fee_total: 0,
+            sys_loss_total: 0,
+            net_total: 0,
+            payment_status: r.payment_status || 'Unpaid',
+            payment_date: r.payment_date || '',
+            rows: []
+          });
+        }
+        const g = map.get(key);
+        if ((r.category || '').toLowerCase() === 'power') g.power_due += Number(r.amount_due) || 0;
+        else g.water_due += Number(r.amount_due) || 0;
+        g.admin_fee_total += Number(r.admin_fee_10) || 0;
+        g.sys_loss_total += Number(r.system_loss_inc) || 0;
+        if (r.payment_status === 'Paid') g.payment_status = 'Paid';
+        g.rows.push(r);
+      });
+
+      // Compute Admin Fee (10% of meter due for power and water), System Loss Other Charges VAT & EWT, and Net
+      map.forEach(g => {
+        const totalMeterDue = g.power_due + g.water_due;
+        g.admin_fee_total = totalMeterDue * 0.10;
+
+        // VAT & EWT on Other Charges (System Loss + Admin Fee)
+        const otherBase = g.sys_loss_total + g.admin_fee_total;
+        g.vat_total = (otherBase / 1.12) * 0.12;
+        g.ewt_total = (otherBase / 1.12) * 0.02;
+
+        // Sub-meter category nets (deducted of their own 2% EWT)
+        const powerEwt = (g.power_due / 1.12) * 0.02;
+        const waterEwt = (g.water_due / 1.12) * 0.02;
+        const powerNet = g.power_due - powerEwt;
+        const waterNet = g.water_due - waterEwt;
+
+        // Total Amount Due = Power (net) + Water (net) + Admin Fee + System Loss - Other Charges 2% EWT
+        g.net_total = powerNet + waterNet + g.admin_fee_total + g.sys_loss_total - g.ewt_total;
+      });
+
+      return Array.from(map.values()).sort((a, b) => (tryToIsoDate(b.soa_date) || '').localeCompare(tryToIsoDate(a.soa_date) || ''));
+    }
+
+    function renderSoaTable() {
+      const allSoas = buildGroupedSoas(readings);
+      populateMonthFilterOptions('soaMonthFilter', allSoas, s => s.soa_date);
+
+      let totalNet = 0, paidNet = 0, unpaidNet = 0, paidCnt = 0, unpaidCnt = 0;
+      allSoas.forEach(s => {
+        totalNet += s.net_total;
+        if (s.payment_status === 'Paid') { paidNet += s.net_total; paidCnt++; }
+        else { unpaidNet += s.net_total; unpaidCnt++; }
+      });
+      document.getElementById('kpiTotalSoas').textContent = allSoas.length;
+      document.getElementById('kpiTotalNet').textContent = formatCurrency(totalNet);
+      document.getElementById('kpiPaidNet').textContent = formatCurrency(paidNet);
+      document.getElementById('kpiPaidCount').textContent = `${paidCnt} SOAs settled`;
+      document.getElementById('kpiUnpaidNet').textContent = formatCurrency(unpaidNet);
+      document.getElementById('kpiUnpaidCount').textContent = `${unpaidCnt} SOAs pending`;
+
+      const q = (document.getElementById('soaSearchInput')?.value || '').toLowerCase().trim();
+      const comp = document.getElementById('soaCompanyFilter')?.value || 'ALL';
+      const status = document.getElementById('soaStatusFilter')?.value || 'ALL';
+
+      const list = allSoas.filter(s => {
+        if (comp !== 'ALL' && s.company !== comp) return false;
+        if (status !== 'ALL' && s.payment_status !== status) return false;
+        if (!matchesDateOrMonth(s.soa_date, 'soaDateFilter', 'soaMonthFilter')) return false;
+        if (q) {
+          const hay = `${s.soa_no} ${s.company} ${s.bill_period} ${formatDisplayDate(s.soa_date, '')}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const pill = document.getElementById('soaSummaryPill');
+      if (pill) {
+        const sum = list.reduce((acc, s) => acc + s.net_total, 0);
+        pill.textContent = `${list.length} ${list.length === 1 ? 'SOA' : 'SOAs'} • ${formatCurrency(sum)}`;
+      }
+
+      const tbody = document.getElementById('soaTableBody');
+      if (!tbody) return;
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:42px; color:var(--text-muted);">No matching Statements of Account.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(s => {
+        const isPaid = s.payment_status === 'Paid';
+        return `
+          <tr>
+            <td><span class="code-badge">${escapeHtml(s.soa_no)}</span></td>
+            <td><strong>${escapeHtml(s.company)}</strong></td>
+            <td>${escapeHtml(s.bill_period)}</td>
+            <td>${escapeHtml(formatDisplayDate(s.soa_date))}</td>
+            <td>${escapeHtml(formatDisplayDate(s.due_date))}</td>
+            <td>${formatCurrency(s.power_due)}</td>
+            <td>${formatCurrency(s.water_due)}</td>
+            <td><strong style="color:var(--primary);">${formatCurrency(s.net_total)}</strong></td>
+            <td>
+              <button type="button" class="status-badge ${isPaid ? 'paid' : 'unpaid'}"
+                onclick="toggleSoaPaymentStatus('${escapeHtml(s.soa_no)}')" title="Click to toggle Paid / Unpaid">
+                <i class="fa-solid ${isPaid ? 'fa-circle-check' : 'fa-clock'}"></i>
+                ${escapeHtml(s.payment_status)}
+              </button>
+            </td>
+            <td style="text-align:center;">
+              <button type="button" class="btn-slip-row" onclick="openSoaSlip('${escapeHtml(s.soa_no)}')">
+                <i class="fa-solid fa-file-lines"></i> Slip
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function toggleSoaPaymentStatus(soaNo) {
+      const targetRows = readings.filter(r => r.soa_no === soaNo);
+      if (targetRows.length === 0) return;
+      const nextStatus = targetRows.some(r => r.payment_status === 'Paid') ? 'Unpaid' : 'Paid';
+      const todayIso = tryToIsoDate(formatTodayDisplayDate());
+      targetRows.forEach(r => {
+        r.payment_status = nextStatus;
+        r.payment_date = nextStatus === 'Paid' ? todayIso : '';
+      });
+      localStorage.setItem(PM_SOA_STORAGE_KEY, JSON.stringify(readings));
+      renderSoaTable();
+    }
+
+    function renderReadingsTable() {
+      const q = (document.getElementById('readSearchInput')?.value || '').toLowerCase().trim();
+      const comp = document.getElementById('readCompanyFilter')?.value || 'ALL';
+      const cat = document.getElementById('readCategoryFilter')?.value || 'ALL';
+
+      const list = readings.filter(r => {
+        if (comp !== 'ALL' && r.company !== comp) return false;
+        if (cat !== 'ALL' && r.category !== cat) return false;
+        if (q) {
+          const hay = `${r.soa_no} ${r.company} ${r.category} ${r.unit} ${r.period} ${r.bill_period}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const pill = document.getElementById('readSummaryPill');
+      if (pill) {
+        const sum = list.reduce((acc, r) => acc + (Number(r.net_amount) || 0), 0);
+        pill.textContent = `${list.length} Readings • ${formatCurrency(sum)}`;
+      }
+
+      const tbody = document.getElementById('readingsTableBody');
+      if (!tbody) return;
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:42px; color:var(--text-muted);">No matching meter readings.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(r => `
+        <tr>
+          <td><span class="code-badge">${escapeHtml(r.soa_no)}</span></td>
+          <td><strong>${escapeHtml(r.company)}</strong></td>
+          <td>${escapeHtml(r.category)}</td>
+          <td>${escapeHtml(r.unit)}</td>
+          <td>${escapeHtml(r.period)}</td>
+          <td>${escapeHtml(r.prev_reading || '—')} &rarr; ${escapeHtml(r.curr_reading || '—')}</td>
+          <td><strong>${Number(r.consumption || 0).toLocaleString()}</strong></td>
+          <td>₱ ${Number(r.rate || 0).toFixed(2)}</td>
+          <td>${formatCurrency(r.amount_due)}</td>
+          <td><strong style="color:var(--success);">${formatCurrency(r.net_amount)}</strong></td>
+          <td style="text-align:center; white-space:nowrap;">
+            <button type="button" class="btn-slip-row" onclick="openEditReadingModal('${escapeHtml(r.id)}')" title="Update this meter reading">
+              <i class="fa-solid fa-pen-to-square" style="color:var(--accent);"></i> Update
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderSharedDuesTables() {
+      const aveBody = document.getElementById('aveTableBody');
+      if (aveBody) {
+        aveBody.innerHTML = costAverages.map(a => `
+          <tr>
+            <td><strong>${escapeHtml(a.particulars)}</strong></td>
+            <td>${a.amt ? formatCurrency(a.amt) : '—'}</td>
+            <td>${a.rmrci ? formatCurrency(a.rmrci) : '—'}</td>
+            <td>${a.pesc ? formatCurrency(a.pesc) : '—'}</td>
+            <td>${a.rbi ? formatCurrency(a.rbi) : '—'}</td>
+            <td>${a.rldi ? formatCurrency(a.rldi) : '—'}</td>
+          </tr>
+        `).join('');
+      }
+
+      const duesBody = document.getElementById('fixedDuesTableBody');
+      if (duesBody) {
+        duesBody.innerHTML = fixedDues.map(d => `
+          <tr>
+            <td><strong>${escapeHtml(d.particulars || '—')}</strong></td>
+            <td>${escapeHtml(d.sub_type || '—')}</td>
+            <td>${d.fixed_dues ? formatCurrency(d.fixed_dues) : '—'}</td>
+            <td>${d.annual_fee ? formatCurrency(d.annual_fee) : '—'}</td>
+            <td>${d.variable_avg ? formatCurrency(d.variable_avg) : '—'}</td>
+            <td>${escapeHtml(d.schedule || '—')}</td>
+            <td>${d.shared_flag === '1' ? 'Yes' : 'No'}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    let modalMeterItems = [];
+
+    function renderModalMeterItems() {
+      const tbody = document.getElementById('mItemsTableBody');
+      const badge = document.getElementById('mItemsCountBadge');
+      if (!tbody) return;
+
+      if (badge) {
+        badge.textContent = `${modalMeterItems.length} Meter${modalMeterItems.length !== 1 ? 's' : ''}`;
+      }
+
+      if (modalMeterItems.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center; padding:18px; color:var(--text-muted);">
+              No meters added yet. Click <strong>+ Add Item</strong> or <strong>Load Company Meters</strong> above.
+            </td>
+          </tr>
+        `;
+        recalcReadingPreview();
+        return;
+      }
+
+      const comp = document.getElementById('mReadCompany')?.value || 'PESC';
+      const companyMeters = meters.filter(m => m.company === comp);
+
+      tbody.innerHTML = modalMeterItems.map((item, idx) => {
+        const prev = parseFloat(item.prev_reading) || 0;
+        const curr = parseFloat(item.curr_reading) || 0;
+        const rate = parseFloat(item.rate) || 0;
+        const cons = Math.max(0, curr - prev);
+        const amtDue = cons * rate;
+
+        const filteredMeters = companyMeters.filter(m => !item.category || m.category === item.category);
+
+        return `
+          <tr>
+            <td>
+              <select class="form-control-neat" style="padding:6px 10px; height:36px; font-size:0.82rem; width:100%; min-width:125px;"
+                onchange="updateModalItemCategory(${idx}, this.value)">
+                <option value="Power" ${item.category === 'Power' ? 'selected' : ''}>⚡ Power</option>
+                <option value="Water" ${item.category === 'Water' ? 'selected' : ''}>💧 Water</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" list="dl_meters_${idx}" class="form-control-neat" style="padding:6px 10px; height:36px; font-size:0.82rem; width:100%;"
+                value="${escapeHtml(item.unit || '')}" placeholder="Meter Code"
+                onchange="onModalItemUnitSelect(${idx}, this.value)"
+                oninput="updateModalItemField(${idx}, 'unit', this.value)" required>
+              <datalist id="dl_meters_${idx}">
+                ${filteredMeters.map(m => `<option value="${escapeHtml(m.code)}">${escapeHtml(m.floor ? m.floor + ' - ' : '')}${escapeHtml(m.category)}</option>`).join('')}
+              </datalist>
+            </td>
+            <td>
+              <input type="number" step="any" min="0" class="form-control-neat" style="padding:6px 8px; height:36px; font-size:0.82rem; text-align:right; width:100%;"
+                value="${item.prev_reading !== undefined ? item.prev_reading : '0'}"
+                oninput="updateModalItemField(${idx}, 'prev_reading', this.value)">
+            </td>
+            <td>
+              <input type="number" step="any" min="0" class="form-control-neat" style="padding:6px 8px; height:36px; font-size:0.82rem; text-align:right; width:100%;"
+                value="${item.curr_reading !== undefined ? item.curr_reading : '0'}"
+                oninput="updateModalItemField(${idx}, 'curr_reading', this.value)" required>
+            </td>
+            <td style="text-align:right; font-weight:600; padding:8px 8px; vertical-align:middle; color:var(--text); font-size:0.84rem;">
+              ${cons.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+            </td>
+            <td>
+              <input type="number" step="any" min="0" class="form-control-neat" style="padding:6px 8px; height:36px; font-size:0.82rem; text-align:right; width:100%;"
+                value="${item.rate !== undefined ? item.rate : (item.category === 'Water' ? (tariffs.water_rate || 161.87) : (tariffs.power_rate || 15.23))}"
+                oninput="updateModalItemField(${idx}, 'rate', this.value)" required>
+            </td>
+            <td style="text-align:right; font-weight:700; padding:8px 8px; vertical-align:middle; color:var(--primary); font-size:0.86rem;">
+              ${formatCurrency(amtDue)}
+            </td>
+            <td style="text-align:center; vertical-align:middle;">
+              <button type="button" class="btn-icon" style="color:var(--danger); font-size:0.95rem; padding:6px;"
+                onclick="removeModalItemRow(${idx})" title="Remove meter row">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      recalcReadingPreview();
+    }
+
+    function addMeterItemRow(cat = 'Power', unit = '', prev = '0', curr = '0', rate = null) {
+      if (!rate) {
+        rate = cat === 'Water' ? (tariffs.water_rate || 161.87) : (tariffs.power_rate || 15.23);
+      }
+      modalMeterItems.push({
+        id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        original_reading_id: null,
+        category: cat,
+        unit: unit,
+        prev_reading: String(prev),
+        curr_reading: String(curr),
+        rate: Number(rate)
+      });
+      renderModalMeterItems();
+    }
+
+    function removeModalItemRow(idx) {
+      if (modalMeterItems.length <= 1) {
+        if (!confirm('Remove this meter line item?')) return;
+      }
+      modalMeterItems.splice(idx, 1);
+      renderModalMeterItems();
+    }
+
+    function updateModalItemCategory(idx, newCat) {
+      if (!modalMeterItems[idx]) return;
+      modalMeterItems[idx].category = newCat;
+      modalMeterItems[idx].rate = newCat === 'Water' ? (tariffs.water_rate || 161.87) : (tariffs.power_rate || 15.23);
+      renderModalMeterItems();
+    }
+
+    function updateModalItemField(idx, field, val) {
+      if (!modalMeterItems[idx]) return;
+      modalMeterItems[idx][field] = val;
+      recalcReadingPreview();
+    }
+
+    function onModalItemUnitSelect(idx, val) {
+      if (!modalMeterItems[idx]) return;
+      const matched = meters.find(m => m.code.toLowerCase() === val.trim().toLowerCase());
+      if (matched) {
+        modalMeterItems[idx].unit = matched.code;
+        if (matched.category) {
+          modalMeterItems[idx].category = matched.category;
+          modalMeterItems[idx].rate = matched.category === 'Water' ? (tariffs.water_rate || 161.87) : (tariffs.power_rate || 15.23);
+        }
+        if (matched.last_reading) {
+          modalMeterItems[idx].prev_reading = matched.last_reading;
+          modalMeterItems[idx].curr_reading = matched.last_reading;
+        }
+        renderModalMeterItems();
+      }
+    }
+
+    function autoLoadCompanyMetersIntoModal(silent = false) {
+      const comp = document.getElementById('mReadCompany')?.value || 'PESC';
+      const companyMeters = meters.filter(m => m.company === comp && m.status !== 'Inactive');
+
+      if (companyMeters.length > 0) {
+        modalMeterItems = companyMeters.map(m => ({
+          id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+          original_reading_id: null,
+          category: m.category || (m.code.includes('WM') ? 'Water' : 'Power'),
+          unit: m.code,
+          prev_reading: m.last_reading || '0',
+          curr_reading: m.last_reading || '0',
+          rate: (m.category === 'Water' || m.code.includes('WM')) ? (tariffs.water_rate || 161.87) : (tariffs.power_rate || 15.23)
+        }));
+        if (!silent) showToast(`Loaded ${modalMeterItems.length} registered meters for ${comp}!`, 'success');
+      } else {
+        modalMeterItems = [
+          { id: 'item_p1', original_reading_id: null, category: 'Power', unit: `2F-${comp}-SM01`, prev_reading: '0', curr_reading: '0', rate: tariffs.power_rate || 15.23 },
+          { id: 'item_p2', original_reading_id: null, category: 'Power', unit: `2F-${comp}-SM02`, prev_reading: '0', curr_reading: '0', rate: tariffs.power_rate || 15.23 },
+          { id: 'item_p3', original_reading_id: null, category: 'Power', unit: `2F-${comp}-SM03`, prev_reading: '0', curr_reading: '0', rate: tariffs.power_rate || 15.23 },
+          { id: 'item_p4', original_reading_id: null, category: 'Power', unit: `2F-${comp}-SM04`, prev_reading: '0', curr_reading: '0', rate: tariffs.power_rate || 15.23 },
+          { id: 'item_w1', original_reading_id: null, category: 'Water', unit: `2F-${comp}-WM01`, prev_reading: '0', curr_reading: '0', rate: tariffs.water_rate || 161.87 },
+          { id: 'item_w2', original_reading_id: null, category: 'Water', unit: `2F-${comp}-WM02`, prev_reading: '0', curr_reading: '0', rate: tariffs.water_rate || 161.87 }
+        ];
+        if (!silent) showToast(`Default 4 Power & 2 Water meters prepared for ${comp}.`, 'info');
+      }
+
+      renderModalMeterItems();
+    }
+
+    function onModalCompanyChange() {
+      const comp = document.getElementById('mReadCompany')?.value || 'PESC';
+      const existingSoas = readings.filter(r => r.company === comp && r.soa_no);
+      const count = new Set(existingSoas.map(r => r.soa_no)).size;
+      const soaInput = document.getElementById('mReadSoaNo');
+      if (soaInput && (!soaInput.value || soaInput.value.includes('-U2026-'))) {
+        soaInput.value = `${comp}-U2026-${String(count + 1).padStart(4, '0')}`;
+      }
+      autoLoadCompanyMetersIntoModal(true);
+    }
+
+    function openAddReadingModal() {
+      syncCompanyFilterDropdowns();
+      const editInput = document.getElementById('mReadEditId');
+      if (editInput) editInput.value = '';
+
+      const title = document.getElementById('modalReadingTitle');
+      if (title) title.innerHTML = '<i class="fa-solid fa-gauge-high" style="color:var(--accent);"></i> Record Meter Readings';
+
+      const submitBtn = document.getElementById('btnSaveReadingSubmit');
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Save Readings';
+
+      const compSelect = document.getElementById('mReadCompany');
+      const comp = compSelect ? compSelect.value : 'PESC';
+
+      const existingSoas = readings.filter(r => r.company === comp && r.soa_no);
+      const count = new Set(existingSoas.map(r => r.soa_no)).size;
+      document.getElementById('mReadSoaNo').value = `${comp}-U2026-${String(count + 1).padStart(4, '0')}`;
+
+      const today = new Date();
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + 5);
+
+      document.getElementById('mReadPeriod').value = `24${DATE_MONTH_ABBR[(today.getMonth() + 11) % 12]}2026 - 23${DATE_MONTH_ABBR[today.getMonth()]}2026`;
+      setFormattedDateInputValue('mReadSoaDate', formatTodayDisplayDate());
+      setFormattedDateInputValue('mReadDueDate', formatDisplayDate(dueDate.toISOString().slice(0, 10), formatTodayDisplayDate()));
+
+      autoLoadCompanyMetersIntoModal(true);
+      openModal('modalAddReading');
+    }
+
+    function openEditReadingModal(id) {
+      const r = readings.find(x => String(x.id) === String(id));
+      if (!r) return;
+
+      syncCompanyFilterDropdowns();
+      const editInput = document.getElementById('mReadEditId');
+      if (editInput) editInput.value = r.soa_no ? `soa:${r.soa_no}` : String(r.id);
+
+      const title = document.getElementById('modalReadingTitle');
+      if (title) title.innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:var(--accent);"></i> Update Meter Readings (${escapeHtml(r.soa_no || r.unit)})`;
+
+      const submitBtn = document.getElementById('btnSaveReadingSubmit');
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Readings';
+
+      document.getElementById('mReadCompany').value = r.company;
+      document.getElementById('mReadSoaNo').value = r.soa_no || '';
+      document.getElementById('mReadPeriod').value = r.period || r.bill_period || '';
+
+      setFormattedDateInputValue('mReadSoaDate', formatDisplayDate(r.soa_date, formatTodayDisplayDate()));
+      setFormattedDateInputValue('mReadDueDate', formatDisplayDate(r.due_date, formatTodayDisplayDate()));
+
+      const siblingRows = r.soa_no ? readings.filter(x => x.soa_no === r.soa_no) : [r];
+
+      modalMeterItems = siblingRows.map(row => ({
+        id: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        original_reading_id: row.id,
+        category: row.category || 'Power',
+        unit: row.unit,
+        prev_reading: (row.prev_reading && row.prev_reading !== '—' && row.prev_reading !== '-') ? row.prev_reading : '0',
+        curr_reading: (row.curr_reading && row.curr_reading !== '—' && row.curr_reading !== '-') ? row.curr_reading : '0',
+        rate: Number(row.rate) || (row.category === 'Water' ? (tariffs.water_rate || 161.87) : (tariffs.power_rate || 15.23))
+      }));
+
+      renderModalMeterItems();
+      openModal('modalAddReading');
+    }
+
+    function recalcReadingPreview() {
+      let powerSubtotal = 0;
+      let waterSubtotal = 0;
+
+      modalMeterItems.forEach(item => {
+        const prev = parseFloat(item.prev_reading) || 0;
+        const curr = parseFloat(item.curr_reading) || 0;
+        const rate = parseFloat(item.rate) || 0;
+        const cons = Math.max(0, curr - prev);
+        const amtDue = cons * rate;
+        if ((item.category || '').toLowerCase() === 'water') {
+          waterSubtotal += amtDue;
+        } else {
+          powerSubtotal += amtDue;
+        }
+      });
+
+      const powerEwt = (powerSubtotal / 1.12) * 0.02;
+      const waterEwt = (waterSubtotal / 1.12) * 0.02;
+      const powerNet = powerSubtotal - powerEwt;
+      const waterNet = waterSubtotal - waterEwt;
+
+      const totalAmtDue = powerSubtotal + waterSubtotal;
+      const adminFee = totalAmtDue * 0.10;
+      const ewtAmt = (totalAmtDue / 1.12) * 0.02;
+      const net = totalAmtDue + adminFee - ewtAmt;
+
+      const pSum = document.getElementById('mReadPowerSummary');
+      if (pSum) pSum.textContent = formatCurrency(powerNet);
+
+      const wSum = document.getElementById('mReadWaterSummary');
+      if (wSum) wSum.textContent = formatCurrency(waterNet);
+
+      const aSum = document.getElementById('mReadAdminSummary');
+      if (aSum) aSum.textContent = formatCurrency(adminFee);
+
+      const eSum = document.getElementById('mReadEwtSummary');
+      if (eSum) eSum.textContent = `(${formatCurrency(ewtAmt)})`;
+
+      const netPrev = document.getElementById('mReadNetPreview');
+      if (netPrev) netPrev.textContent = formatCurrency(net);
+
+      const badge = document.getElementById('mItemsCountBadge');
+      if (badge) badge.textContent = `${modalMeterItems.length} Meter${modalMeterItems.length !== 1 ? 's' : ''}`;
+    }
+
+    function handleAddReadingSubmit(e) {
+      e.preventDefault();
+      if (!modalMeterItems || modalMeterItems.length === 0) {
+        showToast('Please add at least one meter item.', 'warning');
+        return;
+      }
+
+      const validItems = modalMeterItems.filter(item => item.unit && item.unit.trim().length > 0);
+      if (validItems.length === 0) {
+        showToast('Please specify a valid meter unit code for your items.', 'warning');
+        return;
+      }
+
+      const editId = document.getElementById('mReadEditId')?.value || '';
+      const company = document.getElementById('mReadCompany').value;
+      const soaNo = document.getElementById('mReadSoaNo').value.trim();
+      const period = document.getElementById('mReadPeriod').value.trim();
+      const soaIso = tryToIsoDate(document.getElementById('mReadSoaDate').value);
+      const dueIso = tryToIsoDate(document.getElementById('mReadDueDate').value);
+      const parts = soaIso ? soaIso.split('-').map(Number) : [2026, 11, 12];
+      const billPeriod = `${DATE_MONTH_ABBR[parts[1] - 1]} ${parts[0]}`;
+
+      // If updating, remove old rows for this SOA or reading ID
+      if (editId) {
+        if (editId.startsWith('soa:')) {
+          const targetSoa = editId.replace('soa:', '');
+          readings = readings.filter(x => x.soa_no !== targetSoa);
+        } else {
+          const oldR = readings.find(x => String(x.id) === String(editId));
+          if (oldR && oldR.soa_no) {
+            readings = readings.filter(x => x.soa_no !== oldR.soa_no);
+          } else {
+            readings = readings.filter(x => String(x.id) !== String(editId));
+          }
+        }
+      }
+
+      const newEntries = [];
+      validItems.forEach((item, i) => {
+        const prev = parseFloat(item.prev_reading) || 0;
+        const curr = parseFloat(item.curr_reading) || 0;
+        const rate = parseFloat(item.rate) || 0;
+        const cons = Math.max(0, curr - prev);
+        const amtDue = cons * rate;
+        const vatAmt = (amtDue / 1.12) * 0.12;
+        const ewtAmt = (amtDue / 1.12) * 0.02;
+        const adminFee = amtDue * 0.10;
+        const net = amtDue + adminFee - ewtAmt;
+
+        const entry = {
+          id: item.original_reading_id || ('rd_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 4)),
+          company: company,
+          category: item.category || 'Power',
+          unit: item.unit.trim(),
+          period: period,
+          prev_reading: String(prev),
+          curr_reading: String(curr),
+          consumption: cons,
+          rate: rate,
+          amount_due: amtDue,
+          soa_no: soaNo,
+          soa_date: soaIso,
+          due_date: dueIso,
+          month_code: DATE_MONTH_ABBR[parts[1] - 1].toUpperCase(),
+          bill_period: billPeriod,
+          vat_amt: vatAmt,
+          ewt_amt: ewtAmt,
+          amount_less_ewt: amtDue - ewtAmt,
+          system_loss_inc: 0,
+          system_loss_exl: 0,
+          admin_fee_10: adminFee,
+          admin_fee_base: adminFee / 1.12,
+          sysloss_plus_admin: adminFee,
+          other_ewt_2: (adminFee / 1.12) * 0.02,
+          net_amount: net,
+          payment_status: 'Unpaid',
+          payment_date: ''
+        };
+
+        newEntries.push(entry);
+
+        // Update meter registry if unit exists
+        const unitCode = entry.unit;
+        const targetMeter = meters.find(m => m.code.toLowerCase() === unitCode.toLowerCase());
+        if (targetMeter) {
+          targetMeter.last_reading = entry.curr_reading;
+          targetMeter.total_consumption = (Number(targetMeter.total_consumption) || 0) + cons;
+          targetMeter.readings_count = (Number(targetMeter.readings_count) || 0) + 1;
+        }
+      });
+
+      // Insert all new entries at start of readings
+      readings = [...newEntries, ...readings];
+      localStorage.setItem(PM_SOA_STORAGE_KEY, JSON.stringify(readings));
+      localStorage.setItem(PM_METERS_STORAGE_KEY, JSON.stringify(meters));
+
+      closeModal('modalAddReading');
+      renderSoaTable();
+      renderReadingsTable();
+      renderDataRegistry();
+      showToast(`${newEntries.length} meter reading${newEntries.length > 1 ? 's' : ''} saved for SOA ${soaNo}!`, 'success');
+    }
+
+    function openSoaSlip(soaNo) {
+      const soa = buildGroupedSoas(readings).find(s => s.soa_no === soaNo);
+      if (!soa) return;
+      const co = companyDirectory[soa.company] || { name: soa.company, address: '136 R-II Building, Malakas Street, Diliman Quezon City 1100' };
+      const powerRows = soa.rows.filter(r => (r.category || '').toLowerCase() === 'power');
+      const waterRows = soa.rows.filter(r => (r.category || '').toLowerCase() === 'water');
+
+      const renderSubRows = (arr, categoryName, unitLabel) => {
+        if (arr.length === 0) {
+          return `<tr><td colspan="6" style="text-align:center; color:#64748b; padding:10px;">No ${escapeHtml(categoryName.toLowerCase())} meter entries</td></tr>`;
+        }
+        const totalCons = arr.reduce((sum, r) => sum + (Number(r.consumption) || 0), 0);
+        const totalAmt = arr.reduce((sum, r) => sum + (Number(r.amount_due) || 0), 0);
+        const totalVat = (totalAmt / 1.12) * 0.12;
+        const totalEwt = (totalAmt / 1.12) * 0.02;
+        const categoryTotalLessEwt = totalAmt - totalEwt;
+
+        const rowsHtml = arr.map(r => `
+          <tr>
+            <td>${escapeHtml(r.unit)}</td>
+            <td style="text-align:right;">${escapeHtml(r.prev_reading || '—')}</td>
+            <td style="text-align:right;">${escapeHtml(r.curr_reading || '—')}</td>
+            <td style="text-align:right;">${Number(r.consumption || 0).toLocaleString()}</td>
+            <td style="text-align:right;">₱ ${Number(r.rate || 0).toFixed(2)}</td>
+            <td style="text-align:right;"><strong>${formatCurrency(r.amount_due)}</strong></td>
+          </tr>
+        `).join('');
+
+        const vatAndEwtRows = `
+          <tr style="border-top:1px solid #cbd5e1; color:#475569; font-size:0.75rem;">
+            <td colspan="5" style="text-align:right;">12% VAT (Included)</td>
+            <td style="text-align:right;">${formatCurrency(totalVat)}</td>
+          </tr>
+          <tr style="color:#475569; font-size:0.75rem;">
+            <td colspan="5" style="text-align:right;">Less: 2% EWT</td>
+            <td style="text-align:right;">(${formatCurrency(totalEwt)})</td>
+          </tr>
+        `;
+
+        const totalRowHtml = `
+          <tr style="background:#f8fafc; font-weight:700; border-top:1px solid #cbd5e1;">
+            <td colspan="3">TOTAL ${escapeHtml(categoryName.toUpperCase())}</td>
+            <td style="text-align:right;">${totalCons.toLocaleString()}</td>
+            <td style="text-align:center; font-size:0.73rem; color:#64748b;">${escapeHtml(unitLabel)}</td>
+            <td style="text-align:right;"><strong style="color:#1E355F;">${formatCurrency(categoryTotalLessEwt)}</strong></td>
+          </tr>
+        `;
+        return rowsHtml + vatAndEwtRows + totalRowHtml;
+      };
+
+      document.getElementById('soaSlipContainer').innerHTML = `
+        <div class="soa-sheet">
+          <div class="soa-sheet-top">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <img src="./RII_Logo.png" alt="R-II Builders" style="height:40px;" onerror="this.style.display='none'">
+              <div>
+                <div style="font-weight:700; font-size:1rem; color:#1E355F;">R-II BUILDERS, INC.</div>
+                <div style="font-size:0.74rem; color:#475569;">136 R-II Building, Malakas Street, Diliman Quezon City</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-weight:700; font-size:1.05rem; color:#1E355F;">STATEMENT OF ACCOUNT</div>
+              <div style="font-family:monospace; font-weight:700; color:#b45309;">${escapeHtml(soa.soa_no)}</div>
+            </div>
+          </div>
+
+          <div class="soa-meta-grid">
+            <div>
+              <div style="font-size:0.72rem; color:#f59e0b; text-transform:uppercase; font-weight:600;">Bill To</div>
+              <div style="font-weight:700; font-size:0.9rem;">${escapeHtml(co.name)}</div>
+              <div style="font-size:0.76rem; color:#475569;">${escapeHtml(co.address)}</div>
+            </div>
+            <div style="font-size:0.78rem;">
+              <div><strong>SOA Date:</strong> ${escapeHtml(formatDisplayDate(soa.soa_date))}</div>
+              <div><strong>Billing Period:</strong> ${escapeHtml(soa.bill_period)}</div>
+              <div><strong>Due Date:</strong> ${escapeHtml(formatDisplayDate(soa.due_date))}</div>
+            </div>
+          </div>
+
+          <div class="soa-section-title">Power</div>
+          <table class="soa-mini-table">
+            <thead>
+              <tr><th>Unit</th><th>Previous</th><th>Current</th><th>Consumption</th><th>Rate / kWh</th><th>Amount Due</th></tr>
+            </thead>
+            <tbody>${renderSubRows(powerRows, 'Power', 'kWh')}</tbody>
+          </table>
+
+          <div class="soa-section-title">Water</div>
+          <table class="soa-mini-table">
+            <thead>
+              <tr><th>Unit</th><th>Previous</th><th>Current</th><th>Consumption</th><th>Rate / cu.m</th><th>Amount Due</th></tr>
+            </thead>
+            <tbody>${renderSubRows(waterRows, 'Water', 'cu.m')}</tbody>
+          </table>
+
+          <div class="soa-section-title">Other Charges &amp; Summary</div>
+          <table class="soa-mini-table">
+            <tbody>
+              <tr><td>Admin Fee (10% inc. of VAT)</td><td style="text-align:right; width:160px;">${formatCurrency(soa.admin_fee_total)}</td></tr>
+              <tr><td>System Loss</td><td style="text-align:right;">${formatCurrency(soa.sys_loss_total)}</td></tr>
+              <tr><td>12% VAT (Included)</td><td style="text-align:right;">${formatCurrency(soa.vat_total)}</td></tr>
+              <tr><td>Less: 2% EWT</td><td style="text-align:right;">(${formatCurrency(soa.ewt_total)})</td></tr>
+              <tr style="background:#f8fafc; font-weight:700; font-size:0.86rem; color:#f59e0b;">
+                <td>TOTAL AMOUNT DUE</td>
+                <td style="text-align:right;">${formatCurrency(soa.net_total)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="soa-sigs">
+            <div class="soa-sig-box"><strong>Michael N. Antiquin</strong><div>Building Maintenance</div></div>
+            <div class="soa-sig-box"><strong>Clarisa P. Lasam</strong><div>Admin Supervisor</div></div>
+            <div class="soa-sig-box"><strong>Xyza Maxine D. Balassu</strong><div>Accounting Manager</div></div>
+            <div class="soa-sig-box"><strong>Ruth Ginah A. Makawili</strong><div>HRAD Manager</div></div>
+            <div class="soa-sig-box"><strong>Engr. Carlos B. Carlos</strong><div>President &amp; COO</div></div>
+            <div class="soa-sig-box"><strong style="color: #c58b02;">Received By</strong><div>Signature / Date</div></div>
+          </div>
+        </div>
+      `;
+      openModal('modalSoaSlip');
+    }
+
+    function downloadCSV(csvContent, filename) {
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function exportSoaSummaryCSV() {
+      const list = buildGroupedSoas(readings);
+      let csv = 'SOA No,Company,Bill Period,SOA Date,Due Date,Power Due,Water Due,Net Amount,Payment Status\n';
+      list.forEach(s => {
+        csv += `"${s.soa_no}","${s.company}","${s.bill_period}","${formatDisplayDate(s.soa_date, '')}","${formatDisplayDate(s.due_date, '')}",${s.power_due.toFixed(2)},${s.water_due.toFixed(2)},${s.net_total.toFixed(2)},"${s.payment_status}"\n`;
+      });
+      downloadCSV(csv, 'Property_Management_SOA_Summary.csv');
+    }
+
+    function exportReadingsCSV() {
+      let csv = 'SOA No,Company,Category,Unit,Period,Previous,Current,Consumption,Rate,Amount Due,Net Amount,SOA Date,Due Date\n';
+      readings.forEach(r => {
+        csv += `"${r.soa_no}","${r.company}","${r.category}","${r.unit}","${r.period}","${r.prev_reading}","${r.curr_reading}",${r.consumption},${r.rate},${r.amount_due},${r.net_amount},"${formatDisplayDate(r.soa_date, '')}","${formatDisplayDate(r.due_date, '')}"\n`;
+      });
+      downloadCSV(csv, 'Property_Management_Meter_Readings.csv');
+    }
+
+
+    /* ==========================================================================
+       DATA REGISTRY LOGIC & MASTER DATA MANAGEMENT
+       ========================================================================== */
+
+    const DEFAULT_COMPANY_DETAILS = {
+      RLDI: { contact_person: 'Finance & Accounting Lead', email: 'billing@rland.com.ph', phone: '(02) 8924-0001', status: 'Active' },
+      RMRCI: { contact_person: 'Admin & Facilities Supervisor', email: 'admin@rmrci.ph', phone: '(02) 8924-0002', status: 'Active' },
+      RBI: { contact_person: 'Corporate Property Administrator', email: 'admin@riibuilders.com', phone: '(02) 8924-0000', status: 'Active' },
+      PESC: { contact_person: 'Operations & Maintenance Lead', email: 'info@pesc.ph', phone: '(02) 8924-0003', status: 'Active' }
+    };
+
+    const DEFAULT_SPACES = [
+      { code: 'GF', name: 'Ground Floor Lobby & Commercial', area_sqm: 450, primary_tenant: 'RMRCI & RBI', description: 'Main Entrance Lobby, Security Desk, Commercial / Storage Area' },
+      { code: '2F', name: '2nd Floor Office Suites', area_sqm: 520, primary_tenant: 'PESC', description: 'Full floor leased office space for PESC' },
+      { code: '3F', name: '3rd Floor Office Suites', area_sqm: 520, primary_tenant: 'RBI', description: 'R-II Builders Engineering & Technical Team' },
+      { code: '4F', name: '4th Floor Office Suites', area_sqm: 520, primary_tenant: 'RMRCI', description: 'RMRCI Operations & Project Management' },
+      { code: '5F', name: '5th Floor Office Suites', area_sqm: 520, primary_tenant: 'RLDI & RMRCI', description: 'RLAND Development, Inc. HQ & RMRCI Annex' },
+      { code: '6F', name: '6th Floor Executive Suites', area_sqm: 520, primary_tenant: 'RBI', description: 'Executive Offices, Boardroom, C-Suite' },
+      { code: 'ROOF', name: 'Roof Deck & Utilities Facility', area_sqm: 400, primary_tenant: 'Common Facility', description: 'Elevator Machine Room, Water Cisterns, Generator' }
+    ];
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('pmToast');
+      const msgEl = document.getElementById('pmToastMsg');
+      const iconEl = document.getElementById('pmToastIcon');
+      if (!toast || !msgEl) return;
+      toast.className = `pm-toast ${type} show`;
+      msgEl.textContent = message;
+      if (iconEl) {
+        if (type === 'success') iconEl.className = 'fa-solid fa-circle-check';
+        else if (type === 'warning') iconEl.className = 'fa-solid fa-triangle-exclamation';
+        else if (type === 'danger') iconEl.className = 'fa-solid fa-circle-xmark';
+        else iconEl.className = 'fa-solid fa-circle-info';
+      }
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    function initSeedMeters(readingsList) {
+      const map = {};
+      (readingsList || []).forEach(r => {
+        let u = (r.unit || '').trim();
+        if (u === 'System.Xml.XmlElement') {
+          u = '2F-PESC-WM01';
+          r.unit = '2F-PESC-WM01';
+        }
+        if (!u) return;
+        const cat = r.category || (u.includes('WM') || (u.includes('-SM03') && Number(r.rate) > 50) ? 'Water' : 'Power');
+        if (!map[u]) {
+          let floor = 'General';
+          if (u.startsWith('GF-')) floor = 'Ground Floor';
+          else if (u.startsWith('2F-')) floor = '2nd Floor';
+          else if (u.startsWith('3F-')) floor = '3rd Floor';
+          else if (u.startsWith('4F-')) floor = '4th Floor';
+          else if (u.startsWith('5F-')) floor = '5th Floor';
+          else if (u.startsWith('6F-')) floor = '6th Floor';
+
+          map[u] = {
+            code: u,
+            serial_no: 'MTR-' + u.replace(/[^A-Za-z0-9]/g, ''),
+            category: cat,
+            company: r.company || 'PESC',
+            floor: floor,
+            multiplier: 1.0,
+            status: 'Active',
+            initial_reading: (r.prev_reading && r.prev_reading !== '-') ? String(r.prev_reading) : '0',
+            last_reading: (r.curr_reading && r.curr_reading !== '-') ? String(r.curr_reading) : (r.prev_reading || '0'),
+            total_consumption: 0,
+            readings_count: 0,
+            description: `${cat} meter for ${r.company || ''} on ${floor}`
+          };
+        }
+        map[u].total_consumption += Number(r.consumption) || 0;
+        map[u].readings_count++;
+        if (r.curr_reading && r.curr_reading !== '-') {
+          map[u].last_reading = String(r.curr_reading);
+        }
+      });
+      return Object.values(map).sort((a, b) => a.code.localeCompare(b.code));
+    }
+
+    function switchRegistryTab(tabKey, btnEl) {
+      document.querySelectorAll('.registry-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.registry-panel').forEach(p => p.classList.remove('active'));
+
+      if (btnEl) btnEl.classList.add('active');
+      const panelMap = {
+        meters: 'regPanelMeters',
+        tenants: 'regPanelTenants',
+        tariffs: 'regPanelTariffs',
+        spaces: 'regPanelSpaces',
+        backup: 'regPanelBackup'
+      };
+      const panelId = panelMap[tabKey];
+      if (panelId) document.getElementById(panelId)?.classList.add('active');
+
+      if (tabKey === 'meters') renderRegistryMetersTable();
+      else if (tabKey === 'tenants') renderRegistryTenantsTable();
+      else if (tabKey === 'tariffs') renderRegistryTariffs();
+      else if (tabKey === 'spaces') renderRegistrySpacesTable();
+      else if (tabKey === 'backup') renderRegistryBackupStats();
+    }
+
+    function renderDataRegistry() {
+      renderRegistryKPIs();
+      syncCompanyFilterDropdowns();
+      renderRegistryMetersTable();
+      renderRegistryTenantsTable();
+      renderRegistryTariffs();
+      renderRegistrySpacesTable();
+      renderRegistryBackupStats();
+    }
+
+    function renderRegistryKPIs() {
+      const powerCount = meters.filter(m => (m.category || '').toLowerCase() === 'power').length;
+      const waterCount = meters.filter(m => (m.category || '').toLowerCase() === 'water').length;
+      const tenantCount = Object.keys(companyDirectory).length;
+      const activeTenants = Object.values(companyDirectory).filter(c => c.status !== 'Inactive').length;
+
+      document.getElementById('regKpiTotalMeters').textContent = meters.length;
+      document.getElementById('regKpiMetersBreakdown').textContent = `${powerCount} Power • ${waterCount} Water`;
+      document.getElementById('regKpiTotalTenants').textContent = tenantCount;
+      document.getElementById('regKpiTenantsActive').textContent = `${activeTenants} Active Occupants`;
+      document.getElementById('regKpiPowerRate').textContent = `₱ ${Number(tariffs.power_rate || 0).toFixed(2)}`;
+      document.getElementById('regKpiWaterRate').textContent = `₱ ${Number(tariffs.water_rate || 0).toFixed(2)}`;
+    }
+
+    function syncCompanyFilterDropdowns() {
+      const coCodes = Object.keys(companyDirectory).sort();
+      const popSel = (id, labelAll = 'All Companies') => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        const current = sel.value || 'ALL';
+        sel.innerHTML = `<option value="ALL">${labelAll}</option>` + coCodes.map(c => {
+          const name = companyDirectory[c]?.name || c;
+          return `<option value="${escapeHtml(c)}">${escapeHtml(c)} - ${escapeHtml(name)}</option>`;
+        }).join('');
+        if (coCodes.includes(current) || current === 'ALL') sel.value = current;
+      };
+
+      popSel('regMeterCompanyFilter');
+      popSel('soaCompanyFilter');
+      popSel('readCompanyFilter');
+
+      // Sync form modals company select
+      const regCoSel = document.getElementById('regMeterCompany');
+      if (regCoSel) {
+        const cur = regCoSel.value;
+        regCoSel.innerHTML = coCodes.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)} - ${escapeHtml(companyDirectory[c]?.name || c)}</option>`).join('');
+        if (cur && coCodes.includes(cur)) regCoSel.value = cur;
+      }
+      const mReadCoSel = document.getElementById('mReadCompany');
+      if (mReadCoSel) {
+        const cur = mReadCoSel.value;
+        mReadCoSel.innerHTML = coCodes.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)} - ${escapeHtml(companyDirectory[c]?.name || c)}</option>`).join('');
+        if (cur && coCodes.includes(cur)) mReadCoSel.value = cur;
+      }
+    }
+
+    function renderRegistryMetersTable() {
+      const q = (document.getElementById('regMeterSearchInput')?.value || '').toLowerCase().trim();
+      const type = document.getElementById('regMeterTypeFilter')?.value || 'ALL';
+      const comp = document.getElementById('regMeterCompanyFilter')?.value || 'ALL';
+      const status = document.getElementById('regMeterStatusFilter')?.value || 'ALL';
+
+      const filtered = meters.filter(m => {
+        if (type !== 'ALL' && (m.category || '').toLowerCase() !== type.toLowerCase()) return false;
+        if (comp !== 'ALL' && m.company !== comp) return false;
+        if (status !== 'ALL' && m.status !== status) return false;
+        if (q) {
+          const hay = `${m.code} ${m.company} ${m.floor} ${m.serial_no || ''} ${m.description || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const pill = document.getElementById('regMetersPill');
+      if (pill) pill.textContent = `${filtered.length} ${filtered.length === 1 ? 'Meter' : 'Meters'}`;
+
+      const tbody = document.getElementById('regMetersTableBody');
+      if (!tbody) return;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:38px; color:var(--text-muted);">No meters found matching current filters.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(m => {
+        const isWater = (m.category || '').toLowerCase() === 'water';
+        const isActive = m.status === 'Active';
+        const coName = companyDirectory[m.company]?.name || m.company;
+        const totalCons = Number(m.total_consumption || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
+        const unitLabel = isWater ? 'cu.m' : 'kWh';
+
+        return `
+          <tr>
+            <td><strong class="code-badge">${escapeHtml(m.code)}</strong></td>
+            <td>
+              <span class="${isWater ? 'cat-badge-water' : 'cat-badge-power'}">
+                <i class="fa-solid ${isWater ? 'fa-droplet' : 'fa-bolt'}"></i>
+                ${escapeHtml(m.category)}
+              </span>
+            </td>
+            <td>
+              <strong>${escapeHtml(m.company)}</strong>
+              <div style="font-size:0.72rem; color:var(--text-muted); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${escapeHtml(coName)}">${escapeHtml(coName)}</div>
+            </td>
+            <td>${escapeHtml(m.floor || '—')}</td>
+            <td><span style="font-family:monospace; font-size:0.78rem;">${escapeHtml(m.serial_no || '—')}</span></td>
+            <td>${Number(m.multiplier || 1).toFixed(2)}x</td>
+            <td><strong>${escapeHtml(m.last_reading || '0')}</strong></td>
+            <td>${totalCons} ${unitLabel}</td>
+            <td>
+              <button type="button" class="${isActive ? 'badge-status-active' : 'badge-status-inactive'}" onclick="toggleMeterStatus('${escapeHtml(m.code)}')" title="Click to toggle Active / Inactive">
+                <i class="fa-solid ${isActive ? 'fa-check' : 'fa-ban'}"></i>
+                ${escapeHtml(m.status || 'Active')}
+              </button>
+            </td>
+            <td style="text-align:center; white-space:nowrap;">
+              <button type="button" class="action-btn-sm" onclick="quickLogReadingForMeter('${escapeHtml(m.code)}')" title="Log new reading for this meter">
+                <i class="fa-solid fa-plus" style="color:var(--accent);"></i> Read
+              </button>
+              <button type="button" class="action-btn-sm" onclick="openRegisterMeterModal('${escapeHtml(m.code)}')" title="Edit meter information">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button type="button" class="action-btn-sm danger" onclick="deleteMeter('${escapeHtml(m.code)}')" title="Delete this meter">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderRegistryTenantsTable() {
+      const q = (document.getElementById('regTenantSearchInput')?.value || '').toLowerCase().trim();
+      const list = Object.values(companyDirectory).filter(c => {
+        if (!q) return true;
+        const hay = `${c.code} ${c.name} ${c.address || ''} ${c.contact_person || ''} ${c.email || ''}`.toLowerCase();
+        return hay.includes(q);
+      }).sort((a, b) => a.code.localeCompare(b.code));
+
+      const pill = document.getElementById('regTenantsPill');
+      if (pill) pill.textContent = `${list.length} ${list.length === 1 ? 'Company' : 'Companies'}`;
+
+      const tbody = document.getElementById('regTenantsTableBody');
+      if (!tbody) return;
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:38px; color:var(--text-muted);">No tenant companies found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(c => {
+        const assignedMeters = meters.filter(m => m.company === c.code);
+        const powerCount = assignedMeters.filter(m => (m.category || '').toLowerCase() === 'power').length;
+        const waterCount = assignedMeters.filter(m => (m.category || '').toLowerCase() === 'water').length;
+        const isActive = c.status !== 'Inactive';
+
+        return `
+          <tr>
+            <td><strong class="code-badge">${escapeHtml(c.code)}</strong></td>
+            <td><strong>${escapeHtml(c.name)}</strong></td>
+            <td><span style="font-size:0.77rem; color:var(--text-muted);">${escapeHtml(c.address || '136 R-II Bldg')}</span></td>
+            <td>${escapeHtml(c.contact_person || '—')}</td>
+            <td style="font-size:0.76rem;">
+              <div>${c.email ? `<i class="fa-solid fa-envelope" style="color:var(--text-muted);"></i> ${escapeHtml(c.email)}` : '—'}</div>
+              <div>${c.phone ? `<i class="fa-solid fa-phone" style="color:var(--text-muted);"></i> ${escapeHtml(c.phone)}` : ''}</div>
+            </td>
+            <td>
+              <span class="code-badge" style="cursor:pointer;" onclick="filterMetersByTenant('${escapeHtml(c.code)}')">
+                ${assignedMeters.length} Meters (${powerCount}P / ${waterCount}W)
+              </span>
+            </td>
+            <td>
+              <span class="${isActive ? 'badge-status-active' : 'badge-status-inactive'}">
+                <i class="fa-solid ${isActive ? 'fa-check' : 'fa-ban'}"></i> ${escapeHtml(c.status || 'Active')}
+              </span>
+            </td>
+            <td style="text-align:center; white-space:nowrap;">
+              <button type="button" class="action-btn-sm" onclick="openRegisterTenantModal('${escapeHtml(c.code)}')" title="Edit company details">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </button>
+              <button type="button" class="action-btn-sm danger" onclick="deleteTenant('${escapeHtml(c.code)}')" title="Delete company">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterMetersByTenant(code) {
+      switchRegistryTab('meters', document.getElementById('btnTabMeters'));
+      const sel = document.getElementById('regMeterCompanyFilter');
+      if (sel) sel.value = code;
+      renderRegistryMetersTable();
+    }
+
+    function renderRegistryTariffs() {
+      const pRate = document.getElementById('tariffPowerRate');
+      const wRate = document.getElementById('tariffWaterRate');
+      const aPct = document.getElementById('tariffAdminFeePct');
+      const vPct = document.getElementById('tariffVatPct');
+      const ePct = document.getElementById('tariffEwtPct');
+      const sPct = document.getElementById('tariffSysLossPct');
+      const badge = document.getElementById('tariffLastUpdatedBadge');
+
+      if (pRate) pRate.value = tariffs.power_rate || 15.23;
+      if (wRate) wRate.value = tariffs.water_rate || 161.87;
+      if (aPct) aPct.value = tariffs.admin_fee_pct || 10;
+      if (vPct) vPct.value = tariffs.vat_pct || 12;
+      if (ePct) ePct.value = tariffs.ewt_pct || 2;
+      if (sPct) sPct.value = tariffs.system_loss_pct || 1.95;
+      if (badge && tariffs.last_updated) badge.textContent = `Last updated: ${formatDisplayDate(tariffs.last_updated)}`;
+
+      recalcTariffSimulation();
+    }
+
+    function recalcTariffSimulation() {
+      const pRate = parseFloat(document.getElementById('tariffPowerRate')?.value) || 15.23;
+      const aPct = (parseFloat(document.getElementById('tariffAdminFeePct')?.value) || 10) / 100;
+      const ePct = (parseFloat(document.getElementById('tariffEwtPct')?.value) || 2) / 100;
+
+      const base = 100 * pRate;
+      const admin = base * aPct;
+      const ewt = (base / 1.12) * ePct;
+      const net = base + admin - ewt;
+
+      const simBase = document.getElementById('simBaseAmt');
+      const simAdmin = document.getElementById('simAdminAmt');
+      const simEwt = document.getElementById('simEwtAmt');
+      const simNet = document.getElementById('simNetAmt');
+
+      if (simBase) simBase.textContent = formatCurrency(base);
+      if (simAdmin) simAdmin.textContent = formatCurrency(admin);
+      if (simEwt) simEwt.textContent = `(${formatCurrency(ewt)})`;
+      if (simNet) simNet.textContent = formatCurrency(net);
+    }
+
+    function handleSaveTariffsSubmit(e) {
+      e.preventDefault();
+      tariffs = {
+        power_rate: parseFloat(document.getElementById('tariffPowerRate').value) || 15.23,
+        water_rate: parseFloat(document.getElementById('tariffWaterRate').value) || 161.87,
+        admin_fee_pct: parseFloat(document.getElementById('tariffAdminFeePct').value) || 10,
+        vat_pct: parseFloat(document.getElementById('tariffVatPct').value) || 12,
+        ewt_pct: parseFloat(document.getElementById('tariffEwtPct').value) || 2,
+        system_loss_pct: parseFloat(document.getElementById('tariffSysLossPct').value) || 1.95,
+        last_updated: tryToIsoDate(formatTodayDisplayDate())
+      };
+      localStorage.setItem(PM_TARIFFS_STORAGE_KEY, JSON.stringify(tariffs));
+      renderRegistryKPIs();
+      showToast('Active billing tariffs and regulatory rates updated successfully!', 'success');
+    }
+
+    function resetTariffsToDefault() {
+      tariffs = {
+        power_rate: 15.23,
+        water_rate: 161.87,
+        admin_fee_pct: 10,
+        vat_pct: 12,
+        ewt_pct: 2,
+        system_loss_pct: 1.95,
+        last_updated: tryToIsoDate(formatTodayDisplayDate())
+      };
+      localStorage.setItem(PM_TARIFFS_STORAGE_KEY, JSON.stringify(tariffs));
+      renderRegistryTariffs();
+      renderRegistryKPIs();
+      showToast('Billing tariffs reset to defaults.', 'info');
+    }
+
+    function renderRegistrySpacesTable() {
+      const tbody = document.getElementById('regSpacesTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = spaces.map(sp => {
+        const floorMeters = meters.filter(m => (m.floor || '').toLowerCase().includes(sp.code.toLowerCase()) || (m.code || '').startsWith(sp.code + '-'));
+        const pCount = floorMeters.filter(m => (m.category || '').toLowerCase() === 'power').length;
+        const wCount = floorMeters.filter(m => (m.category || '').toLowerCase() === 'water').length;
+
+        return `
+          <tr>
+            <td><strong class="code-badge">${escapeHtml(sp.code)}</strong></td>
+            <td>
+              <strong>${escapeHtml(sp.name)}</strong>
+              <div style="font-size:0.74rem; color:var(--text-muted);">${escapeHtml(sp.description || '')}</div>
+            </td>
+            <td><strong>${Number(sp.area_sqm || 0).toLocaleString()} sq.m</strong></td>
+            <td>${escapeHtml(sp.primary_tenant)}</td>
+            <td><span class="cat-badge-power"><i class="fa-solid fa-bolt"></i> ${pCount} Power</span></td>
+            <td><span class="cat-badge-water"><i class="fa-solid fa-droplet"></i> ${wCount} Water</span></td>
+            <td><span class="badge-status-active"><i class="fa-solid fa-check"></i> Operational</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderRegistryBackupStats() {
+      const readCount = readings.length;
+      const meterCount = meters.length;
+      const tenantCount = Object.keys(companyDirectory).length;
+
+      let totalBytes = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('pm_')) {
+          totalBytes += (localStorage.getItem(k) || '').length * 2;
+        }
+      }
+      const kb = (totalBytes / 1024).toFixed(1);
+
+      document.getElementById('regStorageReadingsCount').textContent = readCount.toLocaleString();
+      document.getElementById('regStorageMetersCount').textContent = meterCount.toLocaleString();
+      document.getElementById('regStorageTenantsCount').textContent = tenantCount.toLocaleString();
+      document.getElementById('regStorageSize').textContent = `${kb} KB`;
+    }
+
+    function openRegisterMeterModal(meterCode = null) {
+      syncCompanyFilterDropdowns();
+      const isEdit = Boolean(meterCode);
+      const title = document.getElementById('modalRegisterMeterTitle');
+      if (title) {
+        title.innerHTML = isEdit
+          ? `<i class="fa-solid fa-pen-to-square" style="color:var(--accent);"></i> Edit Sub-Meter (${escapeHtml(meterCode)})`
+          : '<i class="fa-solid fa-gauge-high" style="color:var(--accent);"></i> Register New Sub-Meter';
+      }
+
+      document.getElementById('regMeterEditOriginalCode').value = meterCode || '';
+
+      if (isEdit) {
+        const m = meters.find(x => x.code === meterCode);
+        if (m) {
+          document.getElementById('regMeterCode').value = m.code;
+          document.getElementById('regMeterCategory').value = m.category || 'Power';
+          document.getElementById('regMeterCompany').value = m.company || 'PESC';
+          document.getElementById('regMeterFloor').value = m.floor || '';
+          document.getElementById('regMeterSerial').value = m.serial_no || '';
+          document.getElementById('regMeterMultiplier').value = m.multiplier || 1.0;
+          document.getElementById('regMeterStatus').value = m.status || 'Active';
+          document.getElementById('regMeterInitialReading').value = m.initial_reading || 0;
+          document.getElementById('regMeterLastReading').value = m.last_reading || 0;
+          document.getElementById('regMeterDescription').value = m.description || '';
+        }
+      } else {
+        document.getElementById('formRegisterMeter').reset();
+        document.getElementById('regMeterMultiplier').value = '1.0';
+        document.getElementById('regMeterStatus').value = 'Active';
+        document.getElementById('regMeterInitialReading').value = '0';
+        document.getElementById('regMeterLastReading').value = '0';
+      }
+
+      openModal('modalRegisterMeter');
+    }
+
+    function handleSaveMeterSubmit(e) {
+      e.preventDefault();
+      const origCode = document.getElementById('regMeterEditOriginalCode').value;
+      const code = document.getElementById('regMeterCode').value.trim();
+      const category = document.getElementById('regMeterCategory').value;
+      const company = document.getElementById('regMeterCompany').value;
+      const floor = document.getElementById('regMeterFloor').value.trim();
+      const serial = document.getElementById('regMeterSerial').value.trim();
+      const multiplier = parseFloat(document.getElementById('regMeterMultiplier').value) || 1.0;
+      const status = document.getElementById('regMeterStatus').value;
+      const initialReading = document.getElementById('regMeterInitialReading').value.trim() || '0';
+      const lastReading = document.getElementById('regMeterLastReading').value.trim() || initialReading;
+      const description = document.getElementById('regMeterDescription').value.trim();
+
+      if (!origCode && meters.some(m => m.code.toLowerCase() === code.toLowerCase())) {
+        alert(`Meter code "${code}" already exists in the registry. Please use a unique meter code.`);
+        return;
+      }
+
+      if (origCode) {
+        const idx = meters.findIndex(m => m.code === origCode);
+        if (idx !== -1) {
+          meters[idx] = {
+            ...meters[idx],
+            code, category, company, floor, serial_no: serial, multiplier, status,
+            initial_reading: initialReading, last_reading: lastReading, description
+          };
+          if (origCode !== code) {
+            readings.forEach(r => { if (r.unit === origCode) r.unit = code; });
+            localStorage.setItem(PM_SOA_STORAGE_KEY, JSON.stringify(readings));
+          }
+        }
+      } else {
+        meters.unshift({
+          code, category, company, floor, serial_no: serial, multiplier, status,
+          initial_reading: initialReading, last_reading: lastReading, description,
+          total_consumption: 0, readings_count: 0
+        });
+      }
+
+      localStorage.setItem(PM_METERS_STORAGE_KEY, JSON.stringify(meters));
+      closeModal('modalRegisterMeter');
+      renderDataRegistry();
+      showToast(`Meter "${code}" saved successfully!`, 'success');
+    }
+
+    function toggleMeterStatus(code) {
+      const m = meters.find(x => x.code === code);
+      if (!m) return;
+      m.status = m.status === 'Active' ? 'Inactive' : 'Active';
+      localStorage.setItem(PM_METERS_STORAGE_KEY, JSON.stringify(meters));
+      renderRegistryMetersTable();
+      renderRegistryKPIs();
+      showToast(`Meter "${code}" status changed to ${m.status}.`, 'info');
+    }
+
+    function deleteMeter(code) {
+      if (!confirm(`Are you sure you want to delete meter "${code}" from the registry?`)) return;
+      meters = meters.filter(m => m.code !== code);
+      localStorage.setItem(PM_METERS_STORAGE_KEY, JSON.stringify(meters));
+      renderDataRegistry();
+      showToast(`Meter "${code}" removed from registry.`, 'warning');
+    }
+
+    function quickLogReadingForMeter(code) {
+      const m = meters.find(x => x.code === code);
+      if (!m) return;
+      openAddReadingModal();
+      document.getElementById('mReadCompany').value = m.company;
+      modalMeterItems = [{
+        id: 'item_' + Date.now(),
+        original_reading_id: null,
+        category: m.category || (m.code.includes('WM') ? 'Water' : 'Power'),
+        unit: m.code,
+        prev_reading: m.last_reading || '0',
+        curr_reading: m.last_reading || '0',
+        rate: (m.category === 'Water' || m.code.includes('WM')) ? (tariffs.water_rate || 161.87) : (tariffs.power_rate || 15.23)
+      }];
+      renderModalMeterItems();
+    }
+
+    function openRegisterTenantModal(companyCode = null) {
+      const isEdit = Boolean(companyCode);
+      const title = document.getElementById('modalRegisterTenantTitle');
+      if (title) {
+        title.innerHTML = isEdit
+          ? `<i class="fa-solid fa-pen-to-square" style="color:var(--accent);"></i> Edit Tenant (${escapeHtml(companyCode)})`
+          : '<i class="fa-solid fa-building-user" style="color:var(--accent);"></i> Register New Tenant Company';
+      }
+
+      document.getElementById('regTenantEditOriginalCode').value = companyCode || '';
+
+      if (isEdit) {
+        const c = companyDirectory[companyCode];
+        if (c) {
+          document.getElementById('regTenantCode').value = c.code || companyCode;
+          document.getElementById('regTenantStatus').value = c.status || 'Active';
+          document.getElementById('regTenantName').value = c.name || '';
+          document.getElementById('regTenantAddress').value = c.address || '';
+          document.getElementById('regTenantContact').value = c.contact_person || '';
+          document.getElementById('regTenantEmail').value = c.email || '';
+          document.getElementById('regTenantPhone').value = c.phone || '';
+        }
+      } else {
+        document.getElementById('formRegisterTenant').reset();
+        document.getElementById('regTenantStatus').value = 'Active';
+      }
+
+      openModal('modalRegisterTenant');
+    }
+
+    function handleSaveTenantSubmit(e) {
+      e.preventDefault();
+      const origCode = document.getElementById('regTenantEditOriginalCode').value;
+      const code = document.getElementById('regTenantCode').value.trim().toUpperCase();
+      const name = document.getElementById('regTenantName').value.trim();
+      const address = document.getElementById('regTenantAddress').value.trim();
+      const status = document.getElementById('regTenantStatus').value;
+      const contact = document.getElementById('regTenantContact').value.trim();
+      const email = document.getElementById('regTenantEmail').value.trim();
+      const phone = document.getElementById('regTenantPhone').value.trim();
+
+      if (!origCode && companyDirectory[code]) {
+        alert(`Company code "${code}" is already registered. Please choose another code.`);
+        return;
+      }
+
+      if (origCode && origCode !== code) {
+        delete companyDirectory[origCode];
+        meters.forEach(m => { if (m.company === origCode) m.company = code; });
+        readings.forEach(r => { if (r.company === origCode) r.company = code; });
+        localStorage.setItem(PM_METERS_STORAGE_KEY, JSON.stringify(meters));
+        localStorage.setItem(PM_SOA_STORAGE_KEY, JSON.stringify(readings));
+      }
+
+      companyDirectory[code] = {
+        code, name, address, status, contact_person: contact, email, phone
+      };
+
+      localStorage.setItem(PM_COMPANIES_STORAGE_KEY, JSON.stringify(companyDirectory));
+      closeModal('modalRegisterTenant');
+      renderDataRegistry();
+      renderSoaTable();
+      renderReadingsTable();
+      showToast(`Tenant "${name}" (${code}) saved successfully!`, 'success');
+    }
+
+    function deleteTenant(code) {
+      const name = companyDirectory[code]?.name || code;
+      const assigned = meters.filter(m => m.company === code).length;
+      if (assigned > 0) {
+        if (!confirm(`Warning: Company "${name}" has ${assigned} assigned meters. Are you sure you want to remove this tenant from the registry?`)) return;
+      } else {
+        if (!confirm(`Are you sure you want to delete "${name}" from the registry?`)) return;
+      }
+
+      delete companyDirectory[code];
+      localStorage.setItem(PM_COMPANIES_STORAGE_KEY, JSON.stringify(companyDirectory));
+      renderDataRegistry();
+      showToast(`Company "${name}" removed from registry.`, 'warning');
+    }
+
+    function exportRegistryJSON() {
+      const backup = {
+        app: 'Property Management | R-II Builders, Inc.',
+        version: '2.0',
+        exported_at: new Date().toISOString(),
+        companies: companyDirectory,
+        meters: meters,
+        tariffs: tariffs,
+        spaces: spaces,
+        readings: readings,
+        fixed_dues: fixedDues,
+        cost_averages: costAverages
+      };
+      const jsonStr = JSON.stringify(backup, null, 2);
+      const filename = `PM_Registry_Backup_${tryToIsoDate(formatTodayDisplayDate()) || 'data'}.json`;
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Database exported successfully as JSON!', 'success');
+    }
+
+    function importRegistryJSON(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target?.result || '{}');
+          if (!data || typeof data !== 'object') throw new Error('Invalid JSON format.');
+
+          if (data.companies && typeof data.companies === 'object') {
+            companyDirectory = data.companies;
+            localStorage.setItem(PM_COMPANIES_STORAGE_KEY, JSON.stringify(companyDirectory));
+          }
+          if (Array.isArray(data.meters)) {
+            meters = data.meters;
+            localStorage.setItem(PM_METERS_STORAGE_KEY, JSON.stringify(meters));
+          }
+          if (data.tariffs && typeof data.tariffs === 'object') {
+            tariffs = { ...tariffs, ...data.tariffs };
+            localStorage.setItem(PM_TARIFFS_STORAGE_KEY, JSON.stringify(tariffs));
+          }
+          if (Array.isArray(data.spaces)) {
+            spaces = data.spaces;
+            localStorage.setItem(PM_SPACES_STORAGE_KEY, JSON.stringify(spaces));
+          }
+          if (Array.isArray(data.readings)) {
+            readings = data.readings;
+            localStorage.setItem(PM_SOA_STORAGE_KEY, JSON.stringify(readings));
+          }
+
+          renderDataRegistry();
+          renderSoaTable();
+          renderReadingsTable();
+          showToast('Data Registry successfully restored from JSON backup!', 'success');
+        } catch (err) {
+          alert('Failed to parse backup file: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function exportMetersCSV() {
+      let csv = 'Meter Code,Category,Company,Floor,Serial No,Multiplier,Initial Reading,Last Reading,Status,Description\n';
+      meters.forEach(m => {
+        csv += `"${m.code}","${m.category}","${m.company}","${m.floor}","${m.serial_no || ''}",${m.multiplier},${m.initial_reading},${m.last_reading},"${m.status}","${m.description || ''}"\n`;
+      });
+      downloadCSV(csv, 'Property_Management_SubMeters_Registry.csv');
+      showToast('Meters registry exported as CSV!', 'success');
+    }
+
+    function confirmResetSeedData() {
+      openModal('modalResetConfirm');
+    }
+
+    function executeResetSeedData() {
+      localStorage.removeItem(PM_SOA_STORAGE_KEY);
+      localStorage.removeItem(PM_COMPANIES_STORAGE_KEY);
+      localStorage.removeItem(PM_METERS_STORAGE_KEY);
+      localStorage.removeItem(PM_TARIFFS_STORAGE_KEY);
+      localStorage.removeItem(PM_SPACES_STORAGE_KEY);
+
+      const seed = window.soaBillingSeedData || {};
+      readings = Array.isArray(seed.readings) ? JSON.parse(JSON.stringify(seed.readings)) : [];
+      readings.forEach(r => {
+        if (r.unit === 'System.Xml.XmlElement') r.unit = '2F-PESC-WM01';
+        const amt = Number(r.amount_due) || 0;
+        if (!r.admin_fee_10 || Number(r.admin_fee_10) <= 1) {
+          r.admin_fee_10 = amt * 0.10;
+        }
+      });
+
+      companyDirectory = {};
+      Object.keys(seed.companies || {}).forEach(k => {
+        companyDirectory[k] = {
+          ...seed.companies[k],
+          ...(DEFAULT_COMPANY_DETAILS[k] || { status: 'Active' })
+        };
+      });
+
+      meters = initSeedMeters(readings);
+      tariffs = {
+        power_rate: 15.23,
+        water_rate: 161.87,
+        admin_fee_pct: 10,
+        vat_pct: 12,
+        ewt_pct: 2,
+        system_loss_pct: 1.95,
+        last_updated: tryToIsoDate(formatTodayDisplayDate())
+      };
+      spaces = JSON.parse(JSON.stringify(DEFAULT_SPACES));
+
+      localStorage.setItem(PM_SOA_STORAGE_KEY, JSON.stringify(readings));
+      localStorage.setItem(PM_COMPANIES_STORAGE_KEY, JSON.stringify(companyDirectory));
+      localStorage.setItem(PM_METERS_STORAGE_KEY, JSON.stringify(meters));
+      localStorage.setItem(PM_TARIFFS_STORAGE_KEY, JSON.stringify(tariffs));
+      localStorage.setItem(PM_SPACES_STORAGE_KEY, JSON.stringify(spaces));
+
+      closeModal('modalResetConfirm');
+      renderSoaTable();
+      renderReadingsTable();
+      renderSharedDuesTables();
+      renderDataRegistry();
+      showToast('Database reset to original seed state successfully.', 'info');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('pm_theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = 'fa-solid fa-sun';
+      }
+
+      const seed = window.soaBillingSeedData || {};
+      fixedDues = Array.isArray(seed.fixed_dues) ? seed.fixed_dues : [];
+      costAverages = Array.isArray(seed.cost_averages) ? seed.cost_averages : [];
+
+      // 1. Initialize Readings
+      try {
+        const stored = JSON.parse(localStorage.getItem(PM_SOA_STORAGE_KEY) || 'null');
+        readings = Array.isArray(stored) && stored.length > 0
+          ? stored
+          : (Array.isArray(seed.readings) ? JSON.parse(JSON.stringify(seed.readings)) : []);
+      } catch (e) {
+        readings = Array.isArray(seed.readings) ? JSON.parse(JSON.stringify(seed.readings)) : [];
+      }
+      readings.forEach(r => {
+        if (r.unit === 'System.Xml.XmlElement') r.unit = '2F-PESC-WM01';
+        const amt = Number(r.amount_due) || 0;
+        if (!r.admin_fee_10 || Number(r.admin_fee_10) <= 1) {
+          r.admin_fee_10 = amt * 0.10;
+        }
+      });
+
+      // 2. Initialize Companies
+      try {
+        const storedCo = JSON.parse(localStorage.getItem(PM_COMPANIES_STORAGE_KEY) || 'null');
+        if (storedCo && typeof storedCo === 'object' && Object.keys(storedCo).length > 0) {
+          companyDirectory = storedCo;
+        } else {
+          companyDirectory = {};
+          Object.keys(seed.companies || {}).forEach(k => {
+            companyDirectory[k] = {
+              ...seed.companies[k],
+              ...(DEFAULT_COMPANY_DETAILS[k] || { status: 'Active' })
+            };
+          });
+        }
+      } catch (e) {
+        companyDirectory = seed.companies || {};
+      }
+
+      // 3. Initialize Meters
+      try {
+        const storedMeters = JSON.parse(localStorage.getItem(PM_METERS_STORAGE_KEY) || 'null');
+        if (Array.isArray(storedMeters) && storedMeters.length > 0) {
+          meters = storedMeters;
+        } else {
+          meters = initSeedMeters(readings);
+        }
+      } catch (e) {
+        meters = initSeedMeters(readings);
+      }
+
+      // 4. Initialize Tariffs
+      try {
+        const storedTariffs = JSON.parse(localStorage.getItem(PM_TARIFFS_STORAGE_KEY) || 'null');
+        if (storedTariffs && typeof storedTariffs === 'object') {
+          tariffs = { ...tariffs, ...storedTariffs };
+        }
+      } catch (e) { }
+
+      // 5. Initialize Spaces
+      try {
+        const storedSpaces = JSON.parse(localStorage.getItem(PM_SPACES_STORAGE_KEY) || 'null');
+        if (Array.isArray(storedSpaces) && storedSpaces.length > 0) {
+          spaces = storedSpaces;
+        } else {
+          spaces = JSON.parse(JSON.stringify(DEFAULT_SPACES));
+        }
+      } catch (e) {
+        spaces = JSON.parse(JSON.stringify(DEFAULT_SPACES));
+      }
+
+      initFormattedDateInputs();
+      syncCompanyFilterDropdowns();
+      renderSoaTable();
+      renderReadingsTable();
+      renderSharedDuesTables();
+      renderDataRegistry();
+    });
+
+  </script>
+</body>
+
+</html>
