@@ -1,148 +1,1027 @@
-<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Property Management System</title>
-  <link rel="icon" type="image/png" href="./RII_Logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    :root { --primary:#203c70; --accent:#fcae16; --muted:#7788a4; --error:#dc2626; }
-    * { box-sizing:border-box; font-family:'Poppins',sans-serif; }
-    body { margin:0; min-height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center;
-      padding:24px; background:#d9d9d9; position:relative; }
-    .bg-video {
-      position:fixed;
-      top:50%;
-      left:50%;
-      min-width:100%;
-      min-height:100%;
-      width:auto;
-      height:auto;
-      transform:translateX(-50%) translateY(-50%);
-      z-index:0;
-      object-fit:cover;
-      filter:brightness(.85) saturate(1.5);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - R-II Builders Admin Request Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1E355F;
+            --primary-dark: #152748;
+            --accent: #FCAE16;
+            --accent-hover: #e59c11;
+            --bg: #f4f7f6;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #2d3748;
+            --muted: #718096;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        .bg-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: 0;
+            object-fit: cover;
+
+            /* Increased brightness and added saturate */
+            filter: brightness(0.85) saturate(1.5);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(12px);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .brand-header img {
+            width: 80px;
+            margin-bottom: 16px;
+        }
+
+        .brand-header h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .brand-header p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.2s;
+            outline: none;
+            background: #f8fafc;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--primary);
+            background: var(--surface);
+            box-shadow: 0 0 0 3px rgba(30, 53, 95, 0.1);
+        }
+
+        .input-wrapper input:focus+i {
+            color: var(--primary);
+        }
+
+        .options-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+
+        .forgot-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: var(--accent);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .login-btn:active {
+            transform: translateY(1px);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            display: none;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 32px 24px;
+                border-radius: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+        }
+
+        .signup-prompt {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .cookie-banner {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 20;
+            width: min(420px, calc(100% - 40px));
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .98);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, .2);
+            font-size: .8rem;
+        }
+
+        .cookie-banner h2,
+        .cookie-dialog h2 {
+            margin-bottom: 6px;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .cookie-banner p,
+        .cookie-dialog p {
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .cookie-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .cookie-actions button,
+        .cookie-settings-link {
+            border: 0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .cookie-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .cookie-secondary {
+            background: #e2e8f0;
+            color: var(--primary);
+        }
+
+        .cookie-settings-link {
+            padding: 8px 0;
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .cookie-dialog-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, .55);
+        }
+
+        .cookie-dialog-backdrop.open {
+            display: flex;
+        }
+
+        .cookie-dialog {
+            width: min(420px, 100%);
+            padding: 22px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 15px 40px rgba(15, 23, 42, .25);
+        }
+
+        .cookie-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cookie-option strong {
+            display: block;
+            color: var(--primary);
+        }
+
+        .cookie-option small {
+            color: var(--muted);
+        }
+
+        .cookie-option input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .signup-prompt a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: color 0.2s;
+        }
+
+        .signup-prompt a:hover {
+            color: var(--accent);
+        }
+
+        .hidden-field {
+            display: none;
+        }
+
+  </style>
+    <style>
+        body.dark-mode {
+            --bg: #0f172a;
+            --bg-surface: #1e293b;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            color: var(--text-main);
+        }
+
+        body.dark-mode .data-card,
+        body.dark-mode .stat-card,
+        body.dark-mode .welcome-card,
+        body.dark-mode .dashboard-banner,
+        body.dark-mode .sidebar,
+        body.dark-mode .footer,
+        body.dark-mode .profile-dropdown,
+        body.dark-mode .ai-bot-container {
+            background-color: var(--bg-surface);
+            border-color: var(--border);
+            color: var(--text-main);
+        }
+
+        body.dark-mode .header {
+            background-color: #0f172a;
+            border-bottom: 1px solid var(--border);
+        }
+
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background-color: #0f172a;
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+
+        body.dark-mode th {
+            background-color: #0f172a;
+            color: var(--text-muted);
+        }
+
+        body.dark-mode tr:hover td {
+            background-color: #334155;
+        }
+
+        body.dark-mode .nav-link,
+        body.dark-mode .sub-link {
+            color: var(--text-muted);
+        }
+
+        body.dark-mode .nav-link:hover,
+        body.dark-mode .sub-link:hover {
+            background-color: #334155;
+            color: var(--text-main);
+        }
+
+        body.dark-mode .nav-link.active {
+            background-color: #1e355f;
+            color: white;
+        }
+
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode .stat-value {
+            color: var(--text-main);
+        }
+
+        body.dark-mode .icon-btn {
+            color: var(--text-main);
+        }
+
+  </style>
+    <style>
+        .ai-chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 10px;
+            width: 320px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10000;
+        }
+
+        .ai-chat-window.open {
+            transform: scale(1);
+        }
+
+        .ai-chat-header {
+            background: #1E355F;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ai-chat-header img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: contain;
+            border: 2px solid #FCAE16;
+            background: white;
+        }
+
+        .ai-chat-header span {
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .ai-chat-body {
+            height: 300px;
+            padding: 16px;
+            background: #f8fafc;
+            overflow-y: auto;
+        }
+
+        .ai-chat-body p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #334155;
+            background: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            display: inline-block;
+            max-width: 90%;
+        }
+
+        .ai-chat-body p strong {
+            color: #1E355F;
+        }
+
+        .ai-chat-footer {
+            display: flex;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .ai-chat-footer input {
+            flex: 1;
+            border: none;
+            padding: 12px 16px;
+            outline: none;
+            font-size: 0.9rem;
+            min-width: 0;
+        }
+
+        .ai-chat-footer button {
+            background: #FCAE16;
+            border: none;
+            padding: 0 20px;
+            color: #1E355F;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .ai-chat-footer button:hover {
+            background: #eab308;
+        }
+
+        body.dark-mode .ai-chat-window {
+            background: var(--bg-surface);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .ai-chat-body {
+            background: #0f172a;
+        }
+
+        body.dark-mode .ai-chat-body p {
+            background: #1e293b;
+            border-color: #334155;
+            color: var(--text-main);
+        }
+
+        body.dark-mode .ai-chat-body p strong {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .ai-chat-footer {
+            border-color: #334155;
+            background: var(--bg-surface);
+        }
+
+        body.dark-mode .ai-chat-footer input {
+            background: transparent;
+            color: var(--text-main);
+        }
+
+  </style>
+  <style id="pretty-active-design">
+    .nav-link.active,
+    .sub-link.active {
+      color: var(--accent) !important;
+      font-weight: 600 !important;
+      background: rgba(252, 174, 22, 0.05) !important;
+      border-left: 3px solid var(--accent) !important;
     }
-    body::before, body::after { content:""; position:fixed; z-index:1; pointer-events:none; }
-    body::before { width:410px; height:410px; right:-74px; top:-150px; border:3px solid #ffb400;
-      border-radius:0 0 92px 0; transform:rotate(45deg); background:#1556ad;
-      box-shadow:inset 0 0 0 28px #0e3c88, inset 0 0 0 31px #2389db; }
-    body::after { width:180px; height:180px; left:-112px; bottom:-86px; border-radius:0 46px 0 0;
-      transform:rotate(45deg); background:#0d8fc5; box-shadow:inset 0 0 0 28px #07529a, inset 0 0 0 31px #ffad00; }
-    .card { position:relative; z-index:2; width:min(360px,100%); padding:24px 26px 26px; border-radius:10px;
-      border-top:4px solid var(--accent); background:rgba(255,255,255,.94);
-      box-shadow:0 14px 28px rgba(15,23,42,.25); }
-    .brand { text-align:center; margin-bottom:20px; }
-    .brand img { width:58px; height:58px; object-fit:contain; margin-bottom:8px; }
-    .brand h1 { margin:0 0 4px; color:var(--primary); font-size:1.12rem; }
-    .brand p { margin:0; color:var(--muted); font-size:.68rem; }
-    .form-group { margin-bottom:13px; }
-    label { display:block; margin-bottom:5px; color:var(--primary); font-size:.67rem; font-weight:600; }
-    .input { position:relative; }
-    .input i { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:.75rem; }
-    input[type="email"], input[type="password"] { width:100%; border:1px solid #dce4ef; border-radius:6px;
-      padding:9px 10px 9px 28px; background:#f7f9fc; color:#2d3748; outline:none; font-size:.72rem; }
-    input:focus { border-color:var(--primary); background:white; box-shadow:0 0 0 3px rgba(30,53,95,.1); }
-    .options { display:flex; justify-content:space-between; align-items:center; margin:2px 0 15px; font-size:.64rem; }
-    .remember { display:flex; align-items:center; gap:5px; cursor:pointer; }
-    .remember input { width:12px; height:12px; accent-color:var(--primary); }
-    .forgot { border:0; background:none; color:var(--primary); font:inherit; cursor:pointer; }
-    .login { width:100%; display:flex; justify-content:center; align-items:center; gap:8px; border:0;
-      border-radius:6px; padding:10px; background:var(--primary); color:white; font-size:.75rem;
-      font-weight:600; cursor:pointer; }
-    .login:hover { background:#152748; }
-    .error { display:none; align-items:center; gap:8px; margin-bottom:14px; border-radius:6px;
-      padding:9px; background:rgba(239,68,68,.1); color:var(--error); font-size:.7rem; }
-    .signup { margin:12px 0 0; text-align:center; color:var(--muted); font-size:.64rem; }
-    .signup button { border:0; padding:0 0 0 4px; background:transparent; color:var(--primary); font:inherit;
-      font-weight:600; cursor:pointer; }
-    .footer { margin:14px 0 0; text-align:center; color:var(--muted); font-size:.58rem; }
-    @media(max-width:480px){ body{padding:0}.card{min-height:100vh;display:flex;flex-direction:column;justify-content:center;border-radius:0;padding:32px 24px} }
+    .nav-link.active i,
+    .sub-link.active i {
+      color: var(--accent) !important;
+    }
+    .sub-link.active {
+      padding-left: 30px !important;
+    }
+  </style>
+  <style id="ai-bot-fix">
+    .ai-chat-window {
+        display: none;
+        flex-direction: column;
+        width: 320px;
+        height: 400px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        margin-right: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .ai-chat-window.open {
+        display: flex;
+        animation: chatSlideIn 0.3s ease forwards;
+    }
+
+    @keyframes chatSlideIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ai-chat-header {
+        background: #1E355F;
+        color: white;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .ai-chat-header img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: white;
+        padding: 2px;
+    }
+
+    .ai-chat-body {
+        flex: 1;
+        padding: 15px;
+        background: #f8fafc;
+        overflow-y: auto;
+        font-size: 0.85rem;
+        color: #2d3748;
+    }
+
+    .ai-chat-body p {
+        background: white;
+        padding: 10px 15px;
+        border-radius: 15px;
+        border-bottom-left-radius: 4px;
+        display: inline-block;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        margin: 0;
+        max-width: 85%;
+        line-height: 1.4;
+    }
+
+    .ai-chat-body strong {
+        color: #1E355F;
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .ai-chat-footer {
+        padding: 12px 15px;
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 8px;
+    }
+
+    .ai-chat-footer input {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        outline: none;
+        font-size: 0.85rem;
+    }
+
+    .ai-chat-footer input:focus {
+        border-color: #FCAE16;
+    }
+
+    .ai-chat-footer button {
+        background: #FCAE16;
+        color: #1E355F;
+        border: none;
+        border-radius: 20px;
+        padding: 0 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-size: 0.85rem;
+    }
+
+    .ai-chat-footer button:hover {
+        background: #e59c11;
+    }
   </style>
 </head>
+
 <body>
-  <video class="bg-video" autoplay muted loop playsinline>
-    <source src="./RII_Video.mp4" type="video/mp4">
-  </video>
-  <section class="card" aria-labelledby="title">
-    <div class="brand">
-      <img src="./RII_Logo.png" alt="R-II Builders logo" />
-      <h1 id="title">Welcome Back</h1>
-      <p>Admin Request Management System</p>
-    </div>
-    <div class="error" id="error" role="alert">
-      <i class="fa-solid fa-circle-exclamation"></i>
-      <span id="errorText"></span>
-    </div>
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <div class="input">
-          <i class="fa-regular fa-envelope"></i>
-          <input id="email" type="email" placeholder="Enter your email" autocomplete="email" required />
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="./RII_Video.mp4" type="video/mp4">
+    </video>
+
+    <div class="login-container">
+        <div class="brand-header">
+            <img src="RII_Logo.png"
+                alt="R-II Builders Logo">
+            <h1>Welcome Back</h1>
+            <p>Admin Management System</p>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input">
-          <i class="fa-solid fa-lock"></i>
-          <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" required />
+
+        <div class="error-message" id="errorMsg">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span>Invalid email or password.</span>
         </div>
-      </div>
-      <div class="options">
-        <label class="remember"><input id="remember" type="checkbox" /> <span>Remember me</span></label>
-        <button class="forgot" type="button" id="forgot">Forgot password?</button>
-      </div>
-      <button class="login" type="submit"><span>Sign In</span><i class="fa-solid fa-arrow-right"></i></button>
-    </form>
-    <p class="signup">Don't have an account?<button type="button" id="signup">Sign Up</button></p>
-    <p class="footer">© 2026 R-II Builders, Inc. All Rights Reserved.</p>
-  </section>
+
+        <form id="loginForm">
+
+            <div class="form-group hidden-field" id="nameGroup">
+                <label for="fullName">Full Name</label>
+                <div class="input-wrapper">
+                    <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="email" placeholder="Enter your email" required autocomplete="email">
+                    <i class="fa-regular fa-envelope"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="Enter your password" required
+                        autocomplete="current-password">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+            </div>
+
+            <div class="options-row">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="rememberMe">
+                    <span>Remember me</span>
+                </label>
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="btn-text">Sign In</span>
+                <div class="spinner"></div>
+            </button>
+
+            <div class="signup-prompt" id="signupPrompt">
+                Don't have an account? <a href="#" id="toggleSignup">Sign Up</a>
+            </div>
+
+        </form>
+
+        <div class="footer-text">
+            Ã‚Â© 2026 R-II Builders, Inc. All Rights Reserved.
+        </div>
+    </div>
+
+    <aside class="cookie-banner" id="cookieBanner" role="region" aria-label="Cookie settings">
+        <h2>Cookie settings</h2>
+        <p>We use essential storage to keep you signed in. Optional storage remembers your email and display preferences.</p>
+        <div class="cookie-actions">
+            <button type="button" class="cookie-primary" id="acceptOptionalCookies">Accept optional</button>
+            <button type="button" class="cookie-secondary" id="rejectOptionalCookies">Reject optional</button>
+            <button type="button" class="cookie-settings-link" id="openCookieSettings">Settings</button>
+        </div>
+    </aside>
+
+    <div class="cookie-dialog-backdrop" id="cookieDialogBackdrop" role="dialog" aria-modal="true"
+        aria-labelledby="cookieDialogTitle">
+        <section class="cookie-dialog">
+            <h2 id="cookieDialogTitle">Cookie settings</h2>
+            <p>Choose which storage categories you want to allow on this device.</p>
+            <label class="cookie-option">
+                <span><strong>Essential storage</strong><small>Required for authentication and security.</small></span>
+                <input type="checkbox" checked disabled>
+            </label>
+            <label class="cookie-option">
+                <span><strong>Optional storage</strong><small>Remembered email and display preferences.</small></span>
+                <input type="checkbox" id="optionalCookies">
+            </label>
+            <div class="cookie-actions">
+                <button type="button" class="cookie-primary" id="saveCookieSettings">Save settings</button>
+                <button type="button" class="cookie-secondary" id="closeCookieSettings">Cancel</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const authKey = 'property-management-authenticated';
+        const emailKey = 'property-management-email';
+        const rememberedKey = 'property-management-email-remembers';
+        const cookieConsentKey = 'property-management-cookie-consent';
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const rememberMeInput = document.getElementById('rememberMe');
+        const errorMsg = document.getElementById('errorMsg');
+        const nameGroup = document.getElementById('nameGroup');
+        const fullNameInput = document.getElementById('fullName');
+        const toggleSignup = document.getElementById('toggleSignup');
+        const cookieBanner = document.getElementById('cookieBanner');
+        const cookieDialog = document.getElementById('cookieDialogBackdrop');
+        let signupMode = false;
+
+        if (sessionStorage.getItem(authKey) === 'true') {
+            window.location.replace('./property_mgt_system_dahsboard.html');
+        }
+
+        const cookieConsent = localStorage.getItem(cookieConsentKey);
+        window.hasOptionalCookieConsent = () => localStorage.getItem(cookieConsentKey) === 'accepted';
+        if (cookieConsent) cookieBanner.style.display = 'none';
+
+        if (cookieConsent === 'optional' || cookieConsent === 'accepted') {
+            const rememberedEmail = localStorage.getItem(rememberedKey);
+            if (rememberedEmail) {
+                emailInput.value = rememberedEmail;
+                rememberMeInput.checked = true;
+            }
+        }
+
+        function setCookieConsent(value) {
+            localStorage.setItem(cookieConsentKey, value);
+            cookieBanner.style.display = 'none';
+            cookieDialog.classList.remove('open');
+        }
+
+        document.getElementById('acceptOptionalCookies').addEventListener('click', () => setCookieConsent('accepted'));
+        document.getElementById('rejectOptionalCookies').addEventListener('click', () => setCookieConsent('rejected'));
+        document.getElementById('openCookieSettings').addEventListener('click', () => cookieDialog.classList.add('open'));
+        document.getElementById('closeCookieSettings').addEventListener('click', () => cookieDialog.classList.remove('open'));
+        document.getElementById('saveCookieSettings').addEventListener('click', () => {
+            setCookieConsent(document.getElementById('optionalCookies').checked ? 'accepted' : 'rejected');
+        });
+
+        document.querySelector('.forgot-link').addEventListener('click', (event) => {
+            event.preventDefault();
+            errorMsg.style.display = 'flex';
+            errorMsg.querySelector('span').textContent = 'Please contact an administrator to reset your password.';
+        });
+
+        toggleSignup.addEventListener('click', (event) => {
+            event.preventDefault();
+            signupMode = !signupMode;
+            nameGroup.classList.toggle('hidden-field', !signupMode);
+            nameGroup.style.display = signupMode ? 'block' : 'none';
+            fullNameInput.required = signupMode;
+            document.querySelector('.brand-header h1').textContent = signupMode ? 'Create Account' : 'Welcome Back';
+            document.querySelector('.brand-header p').textContent = signupMode
+                ? 'Request access to R-II Builders Management System'
+                : 'Admin Request Management System';
+            document.querySelector('.btn-text').textContent = signupMode ? 'Sign Up' : 'Sign In';
+        });
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const normalizedEmail = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+            const allowedDomains = ['@riibuilders.com', '@riibuilders.com.ph', '@rmrriibuilders.com', '@rmrriibuilders.com.ph'];
+            errorMsg.style.display = 'none';
+
+            if (signupMode) {
+                errorMsg.style.display = 'flex';
+                errorMsg.querySelector('span').textContent = 'Please contact an administrator to create your account.';
+                return;
+            }
+
+            if (!allowedDomains.some((domain) => normalizedEmail.endsWith(domain))) {
+                errorMsg.style.display = 'flex';
+                errorMsg.querySelector('span').textContent = 'Use an authorized R-II Builders email address.';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMsg.style.display = 'flex';
+                errorMsg.querySelector('span').textContent = 'Password must be at least 6 characters.';
+                return;
+            }
+
+            if (rememberMeInput.checked && localStorage.getItem(cookieConsentKey) !== 'rejected') {
+                localStorage.setItem(rememberedKey, normalizedEmail);
+            } else {
+                localStorage.removeItem(rememberedKey);
+            }
+
+            sessionStorage.setItem(authKey, 'true');
+            sessionStorage.setItem(emailKey, normalizedEmail);
+            window.location.replace('./property_mgt_system_dahsboard.html');
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtns = document.querySelectorAll('button[title="Toggle dark mode"]');
+
+            // Initialize
+            if (window.hasOptionalCookieConsent() && localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                toggleBtns.forEach(btn => {
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                    }
+                });
+            }
+
+            // Toggle
+            toggleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const isDark = document.body.classList.toggle('dark-mode');
+                    if (window.hasOptionalCookieConsent()) {
+                        localStorage.setItem('darkMode', isDark);
+                    }
+
+                    toggleBtns.forEach(b => {
+                        const icon = b.querySelector('i');
+                        if (icon) {
+                            if (isDark) {
+                                icon.classList.remove('fa-moon');
+                                icon.classList.add('fa-sun');
+                            } else {
+                                icon.classList.remove('fa-sun');
+                                icon.classList.add('fa-moon');
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const activeSubLink = document.querySelector('.sub-link.active');
+            if (activeSubLink) {
+                const parentSubLinks = activeSubLink.closest('.sub-links');
+                if (parentSubLinks) {
+                    parentSubLinks.classList.add('open');
+                }
+            }
+        });
+    </script>
+  <!-- AI Bot Logic and Styles -->
+  <style id="ai-bot-logic-style">
+    .ai-chat-body {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .ai-msg-bot {
+        align-self: flex-start;
+        background: white;
+        padding: 10px 15px;
+        border-radius: 15px;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        max-width: 85%;
+        font-size: 0.85rem;
+        color: #2d3748;
+        line-height: 1.4;
+    }
+    .ai-msg-bot strong {
+        color: #1E355F;
+        display: block;
+        margin-bottom: 3px;
+    }
+    .ai-msg-user {
+        align-self: flex-end;
+        background: #1E355F;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 15px;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        max-width: 85%;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    .typing-indicator {
+        align-self: flex-start;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        font-style: italic;
+        padding: 5px 15px;
+    }
+    body.dark-mode .ai-msg-bot {
+        background: #334155;
+        color: #f8fafc;
+    }
+    body.dark-mode .ai-msg-bot strong {
+        color: #FCAE16;
+    }
+  </style>
   <script>
-    const authKey = 'property-management-authenticated';
-    const emailKey = 'property-management-email';
-    const rememberedKey = 'property-management-email-remembers';
-    if (sessionStorage.getItem(authKey) === 'true') {
-      window.location.replace('./property_mgt_system_dahsboard.html');
-    }
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const remember = document.getElementById('remember');
-    const rememberedEmail = localStorage.getItem(rememberedKey);
-    if (rememberedEmail) {
-      email.value = rememberedEmail;
-      remember.checked = true;
-    }
-    function showError(message) {
-      document.getElementById('errorText').textContent = message;
-      document.getElementById('error').style.display = 'flex';
-    }
-    document.getElementById('forgot').addEventListener('click', () => {
-      showError('Please contact an administrator to reset your password.');
-    });
-    document.getElementById('signup').addEventListener('click', () => {
-      showError('Please contact an administrator to create your account.');
-    });
-    document.getElementById('loginForm').addEventListener('submit', (event) => {
-      event.preventDefault();
-      const normalizedEmail = email.value.trim().toLowerCase();
-      const allowedDomains = ['@riibuilders.com', '@riibuilders.com.ph', '@rmrriibuilders.com', '@rmrriibuilders.com.ph'];
-      if (!allowedDomains.some((domain) => normalizedEmail.endsWith(domain))) {
-        showError('Use an authorized R-II Builders email address.');
-        return;
-      }
-      if (password.value.length < 6) {
-        showError('Password must be at least 6 characters.');
-        return;
-      }
-      if (remember.checked) localStorage.setItem(rememberedKey, normalizedEmail);
-      else localStorage.removeItem(rememberedKey);
-      sessionStorage.setItem(authKey, 'true');
-      sessionStorage.setItem(emailKey, normalizedEmail);
-      window.location.replace('./property_mgt_system_dahsboard.html');
-    });
+      document.querySelector('.bg-video')?.play().catch(() => {});
   </script>
 </body>
+
 </html>
